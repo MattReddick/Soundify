@@ -12,9 +12,12 @@ import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var player: Player
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        player = Player()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
