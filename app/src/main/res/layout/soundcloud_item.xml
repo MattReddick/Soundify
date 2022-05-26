@@ -46,6 +46,10 @@
             android:layout_toEndOf="@+id/musicNote"
             android:padding="6dp"
             android:textSize = "20sp"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:ellipsize="marquee"
+            android:scrollHorizontally="true"
             android:text="Sample Song - Sample Artist">
         </TextView>
 
