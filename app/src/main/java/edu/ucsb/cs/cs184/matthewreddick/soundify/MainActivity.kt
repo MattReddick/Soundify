@@ -63,7 +63,9 @@ class MainActivity : AppCompatActivity() {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
 //                val value = snapshot.value
-                Log.v("fb", snapshot.key + ": " + snapshot.value)
+                val niceSwing = snapshot.child("NiceSwing")
+//                Log.v("fb", snapshot.key + ": " + snapshot.value)
+                Log.v("fb", niceSwing.key + ": " + niceSwing.child("Artist").value)
 
             }
 
