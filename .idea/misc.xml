@@ -13,12 +13,15 @@
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/drawable/list_item_bg.xml" value="0.131" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/drawable/list_item_bg_soundcloud.xml" value="0.114" />
+        <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/drawable/spotify_queue_item.xml" value="0.109" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/fragment_dashboard.xml" value="0.20416666666666666" />
-        <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/fragment_home.xml" value="0.25" />
-        <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/fragment_notifications.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/fragment_home.xml" value="0.2" />
+        <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/fragment_notifications.xml" value="0.18" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/soundcloud_item.xml" value="0.33" />
+        <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/soundcloud_queue_item.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/spotify_item.xml" value="0.25" />
+        <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/spotify_queue_item.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/menu/bottom_nav_menu.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
       </map>
