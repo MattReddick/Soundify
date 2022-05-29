@@ -122,38 +122,16 @@ class MainActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {
                 Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
             }
-        })
-    }
 
-
-    fun readData() {
-        // Read from the database
-        databaseRef.addValueEventListener(object: ValueEventListener {
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-//                val value = snapshot.value
-                val niceSwing = snapshot.child("NiceSwing")
-//                Log.v("fb", snapshot.key + ": " + snapshot.value)
-                Log.v("fb", niceSwing.key + ": " + niceSwing.child("Artist").value)
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
-            }
         })
 
-        // read from storage
-        val songRef: StorageReference = storageRef.child("Songs/NiceSwing.mp3")
-        songRef.downloadUrl.addOnSuccessListener {
-            // Got the download URL for 'users/me/profile.png'
-            Log.v("fb", "URI: $it")
-        }.addOnFailureListener {
-            // Handle any errors
-            Log.e("firebase", "Error getting data", it)
-        }
-
+//        val songRef: StorageReference = storageRef.child("Songs/NiceSwing.mp3")
+//        songRef.downloadUrl.addOnSuccessListener {
+//            // Got the download URL for 'users/me/profile.png'
+//            Log.v("fb", "URI: $it")
+//        }.addOnFailureListener {
+//            // Handle any errors
+//            Log.e("firebase", "Error getting data", it)
+//        }
     }
 }
