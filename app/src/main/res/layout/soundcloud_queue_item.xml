@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp">
+
+    <RelativeLayout
+        android:id="@+id/songElementQueue"
+        android:background="@color/gray"
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/musicNoteQueue"
+            android:background="@drawable/list_item_bg_soundcloud"
+            android:layout_alignParentStart = "true"
+            android:layout_alignParentTop = "true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src= "@drawable/ic_baseline_music_note_24">
+        </ImageView>
+
+        <ImageButton
+            android:id="@+id/removeFromQueue"
+            android:layout_alignParentEnd = "true"
+            android:layout_alignParentTop = "true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@color/light_purple"
+            android:src = "@drawable/ic_baseline_remove_circle_40">
+        </ImageButton>
+
+        <TextView
+            android:id="@+id/songTextName"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_toStartOf="@+id/removeFromQueue"
+            android:layout_toEndOf="@+id/musicNoteQueue"
+            android:padding="6dp"
+            android:textSize = "20sp"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:ellipsize="marquee"
+            android:scrollHorizontally="true"
+            android:text="Sample Song - Sample Artist">
+        </TextView>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
