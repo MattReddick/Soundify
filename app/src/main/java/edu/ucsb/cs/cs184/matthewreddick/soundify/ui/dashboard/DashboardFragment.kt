@@ -1,5 +1,8 @@
 package edu.ucsb.cs.cs184.matthewreddick.soundify.ui.dashboard
 
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.ColorFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,10 +33,11 @@ class DashboardFragment : Fragment(){
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        /*val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }*/
+        //val progressBar = binding.progressBar
+        //progressBar.progressTintList= ColorStateList.valueOf(Color.GREEN)
+        //can also do this to probably inverse the color of shuffle and loop
+        //so a user knows when they are active
+
 
         return root
     }
