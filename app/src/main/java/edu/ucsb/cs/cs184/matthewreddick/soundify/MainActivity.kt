@@ -7,6 +7,7 @@ import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var player: Player
+    private lateinit var spotifyPlayer: SpotifyPlayer
     private lateinit var songLibrary: MutableList<Song>
 
     private lateinit var firebase: FirebaseDatabase
@@ -39,6 +41,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        spotifyPlayer = SpotifyPlayer(applicationContext, lifecycleScope)
+        Log.i("MainActivity","SpotifyPlayer Made")
         val navView: BottomNavigationView = binding.navView
 
         // Lines below initialize real-time database and firebase storage
