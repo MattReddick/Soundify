@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity() {
         spotifyPlayer = SpotifyPlayer(applicationContext, lifecycleScope)
         Log.i("MainActivity","SpotifyPlayer Made")
         val navView: BottomNavigationView = binding.navView
-
         // Lines below initialize real-time database and firebase storage
         firebase = Firebase.database
         databaseRef = firebase.getReference("Songs")
@@ -55,6 +54,8 @@ class MainActivity : AppCompatActivity() {
         Log.i("songLibrary1", songLibrary.toString())
         getSongs()
         Log.i("songLibrary2", songLibrary.toString())
+
+        getIntent().putExtra("spotifyPlayerObject", spotifyPlayer)
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each

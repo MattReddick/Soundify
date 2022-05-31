@@ -15,6 +15,7 @@ import com.spotify.protocol.types.*
 import com.spotify.android.appremote.api.ContentApi
 import com.spotify.android.appremote.api.error.SpotifyDisconnectedException
 import kotlinx.coroutines.launch
+import java.io.Serializable
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -52,31 +53,69 @@ open class Player {
     }
 }
 
-class SpotifyPlayer : Player {
+class SpotifyPlayer : Player,Serializable {
 
     private var spotifyAppRemote: SpotifyAppRemote? = null
     private val CLIENT_ID = "e01fcf6eba35472bb4aa1db36bf92863"
     /*val REDIRECT_URI = "comspotifytestsdk://callback"*/
     private val REDIRECT_URI = "edu.ucsb.cs.cs184.matthewreddick.soundify://callback"
+    private var mainContext : Context ?= null
+    private val TAG = "SpotifyPlayer Class"
+    private val errorCallback = { throwable: Throwable -> logError(throwable) }
     constructor(context: Context, lifecycleScope : LifecycleCoroutineScope) {
+        SpotifyAppRemote.setDebugMode(true)
         connect(true, context, lifecycleScope)
+    }
+
+    private fun logMessage(msg: String, duration: Int = Toast.LENGTH_SHORT) {
+        Toast.makeText(mainContext, msg, duration).show()
+        Log.d(TAG, msg)
     }
     override fun play() {
         var track_uri = "spotify:track:4IWZsfEkaK49itBwCTFDXQ"
         playUri(track_uri)
     }
 
+    private fun logError(throwable: Throwable) {
+
+        Toast.makeText(mainContext, "test string", Toast.LENGTH_SHORT).show()
+        Log.e(TAG, "", throwable)
+    }
+
     private fun connect(showAuthView: Boolean, context: Context, lifecycleScope : LifecycleCoroutineScope) {
 
         SpotifyAppRemote.disconnect(spotifyAppRemote)
+        mainContext = context
         lifecycleScope.launch {
             try {
-                spotifyAppRemote = connectToAppRemote(showAuthView, context)
+                spotifyAppRemote = connectToAppRemote(showAuthView)
+                onConnected()
+                Log.i("hereColeConnected","hereColeConnected")
             } catch (error: Throwable) {
                 disconnect()
                 //logError(error)
             }
         }
+    }
+    fun onPlayPauseButtonClicked() {
+        assertAppRemoteConnected().let {
+            it.playerApi
+                .playerState
+                .setResultCallback { playerState ->
+                    if (playerState.isPaused) {
+                        it.playerApi
+                            .resume()
+                            .setResultCallback { logMessage("tmp") }
+                            .setErrorCallback(errorCallback)
+                    } else {
+                        it.playerApi
+                            .pause()
+                            .setResultCallback { logMessage("tmp") }
+                            .setErrorCallback(errorCallback)
+                    }
+                }
+        }
+
     }
     private fun disconnect() {
         SpotifyAppRemote.disconnect(spotifyAppRemote)
@@ -105,15 +144,20 @@ class SpotifyPlayer : Player {
     }
 
     private fun playUri(uri: String) {
+        Log.i("hiCOLE","hi")
         assertAppRemoteConnected()
             .playerApi
             .play(uri)
+            .setResultCallback { logMessage("Temp") }
+            .setErrorCallback(errorCallback)
     }
+
     //Be sure to pass context
-    private suspend fun connectToAppRemote(showAuthView: Boolean, context: Context): SpotifyAppRemote? =
+
+    private suspend fun connectToAppRemote(showAuthView: Boolean): SpotifyAppRemote? =
         suspendCoroutine { cont: Continuation<SpotifyAppRemote> ->
             SpotifyAppRemote.connect(
-                context?.applicationContext,
+                mainContext?.applicationContext,
                 ConnectionParams.Builder(CLIENT_ID)
                     .setRedirectUri(REDIRECT_URI)
                     .showAuthView(showAuthView)
@@ -128,6 +172,11 @@ class SpotifyPlayer : Player {
                     }
                 })
         }
+        fun onConnected() {
+
+        }
+
+
     /*
     fun onConnectAndAuthorizeClicked() {
         connect(true)
