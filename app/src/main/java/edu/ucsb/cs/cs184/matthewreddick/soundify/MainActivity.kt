@@ -23,8 +23,11 @@ import com.spotify.sdk.android.auth.AuthorizationClient
 import com.spotify.sdk.android.auth.AuthorizationRequest
 import com.spotify.sdk.android.auth.AuthorizationResponse
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.ActivityMainBinding
-import okhttp3.Call
-import okhttp3.OkHttpClient
+import okhttp3.*
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.IOException
 
 
 class MainActivity : AppCompatActivity() {
@@ -83,8 +86,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-
     }
     private fun getRedirectUri(): Uri? {
         return Uri.Builder()
@@ -124,12 +125,53 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == AUTH_TOKEN_REQUEST_CODE) {
             mAccessToken = response.accessToken
             Log.i("TOKEN",mAccessToken.toString())
+            getIntent().putExtra("tokenObject", mAccessToken)
             //updateTokenView()
         } else if (requestCode == AUTH_CODE_REQUEST_CODE) {
             mAccessCode = response.code
             //updateCodeView()
             Log.i("CODE",mAccessCode.toString())
         }
+    }
+
+    fun searchSpotify(input : String) {
+        val inputEncoded : String = java.net.URLEncoder.encode(input, "utf-8")
+        val myURL : String = "https://api.spotify.com:443/v1/search?q=" + inputEncoded + "&limit=3&market=SE&offset=0&type=track"
+        val request = Request.Builder()
+            .url(myURL)
+            .header(
+                "Authorization",
+                "Bearer " + mAccessToken
+            )
+            .build()
+        cancelCall()
+        val mCall = mOkHttpClient.newCall(request)
+        mCall!!.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.i("MainSearch","Failed to fetch data")
+            }
+
+            @Throws(IOException::class)
+            override fun onResponse(call: Call, response: Response) {
+                try {
+                    val jsonObject = JSONObject(response.body!!.string())
+                    //Log.i("For Cole", jsonObject.toString(3))
+                    val jsonSongs: JSONObject = jsonObject.getJSONObject("tracks")
+                    val items: JSONArray = jsonSongs.getJSONArray(("items"))
+                    val song1 : JSONObject = items[0] as JSONObject
+                    var songInfo1 = listOf(song1.getString("uri"), song1.getString("name"), (song1.getJSONArray("artists")[0] as JSONObject).getString("name"))
+                    val song2 : JSONObject = items[1] as JSONObject
+                    var songInfo2 = listOf(song2.getString("uri"), song2.getString("name"), (song2.getJSONArray("artists")[0] as JSONObject).getString("name"))
+                    val song3 : JSONObject = items[2] as JSONObject
+                    var songInfo3 = listOf(song2.getString("uri"), song3.getString("name"), (song3.getJSONArray("artists")[0] as JSONObject).getString("name"))
+                    val printABLE = listOf(songInfo1, songInfo2, songInfo3)
+                    Log.i("Search Result", printABLE.toString())
+                } catch (e: JSONException) {
+                    Log.i("MainSearch","Failed to parse data")
+                }
+            }
+        })
+        //Log.i("HIFUCKER", response.toString())
     }
 
     fun getSongs(){

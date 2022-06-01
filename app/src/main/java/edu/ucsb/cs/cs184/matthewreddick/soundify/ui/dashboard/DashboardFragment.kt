@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import edu.ucsb.cs.cs184.matthewreddick.soundify.MainActivity
 import edu.ucsb.cs.cs184.matthewreddick.soundify.R
 import edu.ucsb.cs.cs184.matthewreddick.soundify.SpotifyPlayer
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentDashboardBinding
@@ -25,6 +26,8 @@ class DashboardFragment : Fragment(){
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var mySpotifyPlayer : SpotifyPlayer
+    //DELETE BELOW LATER ON JUST FOR TEST
+    private lateinit var accessToken : String
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,6 +42,7 @@ class DashboardFragment : Fragment(){
             val i : Intent? = getActivity()?.getIntent()
             if (i != null) {
                 mySpotifyPlayer = i.getSerializableExtra("spotifyPlayerObject") as SpotifyPlayer
+                accessToken = i.getStringExtra("tokenObject") as String
             }
         }
 

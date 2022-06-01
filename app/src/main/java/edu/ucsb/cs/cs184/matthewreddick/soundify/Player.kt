@@ -91,7 +91,7 @@ class SpotifyPlayer : Player,Serializable {
             try {
                 spotifyAppRemote = connectToAppRemote(showAuthView)
                 onConnected()
-                Log.i("hereColeConnected","hereColeConnected")
+                Log.i("PlayerClass","Connected")
             } catch (error: Throwable) {
                 disconnect()
                 //logError(error)
