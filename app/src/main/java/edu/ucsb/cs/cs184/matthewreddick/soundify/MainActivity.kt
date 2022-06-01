@@ -33,8 +33,7 @@ import java.io.IOException
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var player: Player
-    private lateinit var spotifyPlayer: SpotifyPlayer
+    private lateinit var playerObject: Player
     private lateinit var songLibrary: MutableList<Song>
 
     private lateinit var firebase: FirebaseDatabase
@@ -53,12 +52,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        player = Player()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        spotifyPlayer = SpotifyPlayer(applicationContext, lifecycleScope)
+        playerObject = Player(applicationContext, lifecycleScope)
         Log.i("MainActivity","SpotifyPlayer Made")
         val navView: BottomNavigationView = binding.navView
         // Lines below initialize real-time database and firebase storage
@@ -74,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         getSongs()
         Log.i("songLibrary2", songLibrary.toString())
 
-        getIntent().putExtra("spotifyPlayerObject", spotifyPlayer)
+        getIntent().putExtra("playerObject", playerObject)
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each

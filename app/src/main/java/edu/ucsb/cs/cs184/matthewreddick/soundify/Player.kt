@@ -25,38 +25,11 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 
-open class Player {
+class Player : Serializable {
 
     private var currentSong: Song? = null
     private var queue: ArrayList<Song>? = null
     private var mediaPlayer: MediaPlayer? = null
-
-    open fun play(){
-
-    }
-
-    fun pause(){
-
-    }
-
-    fun skip(){
-
-    }
-
-    fun deleteSong(index:Int){
-
-    }
-
-    fun moveSongUp(){
-
-    }
-
-    fun moveSongDown(){
-
-    }
-}
-
-class SpotifyPlayer : Player,Serializable {
 
     private var spotifyAppRemote: SpotifyAppRemote? = null
     private val CLIENT_ID = "e01fcf6eba35472bb4aa1db36bf92863"
@@ -65,7 +38,12 @@ class SpotifyPlayer : Player,Serializable {
     private var mainContext : Context ?= null
     private val TAG = "SpotifyPlayer Class"
 
-    private var trackWasStarted = false
+    private var trackWasStartedSpotify = false
+
+
+    private fun playSoundCloud(track_uri : String) {
+
+    }
 
     private val errorCallback = { throwable: Throwable -> logError(throwable) }
     constructor(context: Context, lifecycleScope : LifecycleCoroutineScope) {
@@ -77,8 +55,8 @@ class SpotifyPlayer : Player,Serializable {
         Toast.makeText(mainContext, msg, duration).show()
         Log.d(TAG, msg)
     }
-    override fun play() {
-        var track_uri = "spotify:track:4IWZsfEkaK49itBwCTFDXQ"
+
+    fun playSpotify(track_uri : String) {
         playUri(track_uri)
         //trackWasStarted = true
     }
@@ -98,7 +76,8 @@ class SpotifyPlayer : Player,Serializable {
                 spotifyAppRemote = connectToAppRemote(showAuthView)
                 onConnected()
                 spotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback {
-                    handleTrackEnded(it)
+                    val hasEnded : Boolean = handleTrackEnded(it)
+
                 }
                 Log.i("PlayerClass","Connected")
             } catch (error: Throwable) {
@@ -130,18 +109,6 @@ class SpotifyPlayer : Player,Serializable {
     private fun disconnect() {
         SpotifyAppRemote.disconnect(spotifyAppRemote)
     }
-    private fun onConnecting() {
-        /*
-        binding.connectButton.apply {
-            //isEnabled = false
-            text = getString(R.string.connecting)
-        }
-        binding.connectAuthorizeButton.apply {
-            //isEnabled = false
-            text = getString(R.string.connecting)
-        }
-        */
-    }
 
     private fun assertAppRemoteConnected(): SpotifyAppRemote {
         spotifyAppRemote?.let {
@@ -164,13 +131,16 @@ class SpotifyPlayer : Player,Serializable {
     private fun handleTrackEnded (playerState: PlayerState) : Boolean {
         setTrackWasStarted(playerState)
 
-        val isPaused = playerState.isPaused
         val position = playerState.playbackPosition
-        val hasEnded = trackWasStarted && isPaused && position == 0L
+
+        val isPaused = playerState.isPaused
+
+        val hasEnded = trackWasStartedSpotify && isPaused && position == 0L
 
         if (hasEnded) {
-            trackWasStarted = false
-            // ... do whatever you want to do if track ended
+
+            trackWasStartedSpotify = false
+
         }
         return hasEnded
     }
@@ -213,12 +183,14 @@ class SpotifyPlayer : Player,Serializable {
      */
 
     private fun setTrackWasStarted(playerState: PlayerState) {
-        val position = playerState.playbackPosition
         val duration = playerState.track.duration
+        val position = playerState.playbackPosition
         val isPlaying = !playerState.isPaused
 
-        if (!trackWasStarted && position > 0 && duration > 0 && isPlaying) {
-            trackWasStarted = true
+        if (!trackWasStartedSpotify && position > 0 && duration > 0 && isPlaying) {
+
+            trackWasStartedSpotify = true
+
         }
     }
 
@@ -246,60 +218,4 @@ class SpotifyPlayer : Player,Serializable {
 
     }
 
-    fun getAccessToken() {
-        val url : String = "https://accounts.spotify.com/api/token"
-        /*
-        val body: RequestBody = RequestBody.create(JSON, json)
-        val request: Request = Request.Builder()
-            .url(url)
-            .post(body)
-            .build()
-        val response: Response = client.newCall(request).execute()
-        return response.body().string()
-        */
-        /*
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url("https://accounts.spotify.com/api/token")
-            .header("Authorization", "Basic " + (CLIENT_ID + ':' + "5aa7b290fac74bd286c77a8b6bfdc82e"))
-            .build()
-        Log.i("REQUEST", request.toString())
-        var response: Response
-        var result : String? = null
-        try {
-            response = client.newCall(request).execute()
-            result = response.body().string()
-        } catch(e : Exception) {
-            e.printStackTrace()
-            Log.i("ERROR", "request failed")
-        }
-        if (result != null) {
-            Log.i("OURTOKENINFO", result)
-        }
-        */
-        //Log.i("OURTOKENINFO",response.body().string())
-        /*
-        var authOptions = {
-            url: 'https://accounts.spotify.com/api/token',
-            form: {
-                code: code,
-                redirect_uri: redirect_uri,
-                grant_type: 'authorization_code'
-        },
-            headers: {
-            'Authorization': 'Basic ' + (new Buffer(CLIENT_ID + ':' + client_secret).toString('base64'))
-        },
-            json: true
-        };
-
-         */
-    }
-
-
-
-    /*
-    fun onConnectAndAuthorizeClicked() {
-        connect(true)
-    }
-     */
 }

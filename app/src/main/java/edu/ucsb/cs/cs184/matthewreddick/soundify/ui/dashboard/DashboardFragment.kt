@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import edu.ucsb.cs.cs184.matthewreddick.soundify.MainActivity
 import edu.ucsb.cs.cs184.matthewreddick.soundify.R
-import edu.ucsb.cs.cs184.matthewreddick.soundify.SpotifyPlayer
+import edu.ucsb.cs.cs184.matthewreddick.soundify.Player
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentDashboardBinding
 
 
@@ -25,7 +25,7 @@ class DashboardFragment : Fragment(){
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private lateinit var mySpotifyPlayer : SpotifyPlayer
+    private lateinit var playerObject : Player
     //DELETE BELOW LATER ON JUST FOR TEST
     private lateinit var accessToken : String
     override fun onCreateView(
@@ -43,7 +43,7 @@ class DashboardFragment : Fragment(){
         if(getActivity() != null){
             val i : Intent? = getActivity()?.getIntent()
             if (i != null) {
-                 mySpotifyPlayer= i.getSerializableExtra("spotifyPlayerObject") as SpotifyPlayer
+                 playerObject = i.getSerializableExtra("playerObject") as Player
             }
             //Log.i("HomeFragment","accessToken")
         }
@@ -51,8 +51,8 @@ class DashboardFragment : Fragment(){
 
         val playBtn : ImageButton = root.findViewById(R.id.playButton) as ImageButton
         playBtn.setOnClickListener() {
-            if(mySpotifyPlayer != null)
-                mySpotifyPlayer.onPlayPauseButtonClicked()
+            if(playerObject != null)
+                playerObject.onPlayPauseButtonClicked()
         }
 
         //val progressBar = binding.progressBar
