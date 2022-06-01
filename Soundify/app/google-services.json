@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "1021539532914",
+    "firebase_url": "https://cs184-soundify-default-rtdb.firebaseio.com",
+    "project_id": "cs184-soundify",
+    "storage_bucket": "cs184-soundify.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021539532914:android:a025529584c6cbc1ac82eb",
+        "android_client_info": {
+          "package_name": "edu.ucsb.cs.cs184.matthewreddick.soundify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1021539532914-p9sun1l6v3aaere4ql60ucl4hmq2bspu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3dWX-kVz7dgkqPDFOokZcgPd73-mQplU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1021539532914-p9sun1l6v3aaere4ql60ucl4hmq2bspu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021539532914:android:7db6084367f3f1c9ac82eb",
+        "android_client_info": {
+          "package_name": "edu.ucsb.cs.cs184.zacharyfriedland.soundcloudtest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1021539532914-p9sun1l6v3aaere4ql60ucl4hmq2bspu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3dWX-kVz7dgkqPDFOokZcgPd73-mQplU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1021539532914-p9sun1l6v3aaere4ql60ucl4hmq2bspu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
