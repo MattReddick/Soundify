@@ -39,11 +39,22 @@ class DashboardFragment : Fragment(){
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+
+        if(getActivity() != null){
+            val i : Intent? = getActivity()?.getIntent()
+            if (i != null) {
+                 mySpotifyPlayer= i.getSerializableExtra("spotifyPlayerObject") as SpotifyPlayer
+            }
+            //Log.i("HomeFragment","accessToken")
+        }
+
+
         val playBtn : ImageButton = root.findViewById(R.id.playButton) as ImageButton
         playBtn.setOnClickListener() {
             if(mySpotifyPlayer != null)
                 mySpotifyPlayer.onPlayPauseButtonClicked()
         }
+
         //val progressBar = binding.progressBar
         //progressBar.progressTintList= ColorStateList.valueOf(Color.GREEN)
         //can also do this to probably inverse the color of shuffle and loop

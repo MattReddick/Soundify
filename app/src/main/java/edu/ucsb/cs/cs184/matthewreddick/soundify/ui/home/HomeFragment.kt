@@ -35,15 +35,6 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        /*
-        if(getActivity() != null){
-            val i : Intent? = getActivity()?.getIntent()
-            if (i != null) {
-                 accessToken= i.getStringExtra("tokenObject") as String
-            }
-            Log.i("HomeFragment","accessToken")
-        }
-        */
 //        val textView: TextView = binding.textHome
 //        homeViewModel.text.observe(viewLifecycleOwner) {
 //            textView.text = it

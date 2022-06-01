@@ -159,20 +159,24 @@ class MainActivity : AppCompatActivity() {
                     val jsonSongs: JSONObject = jsonObject.getJSONObject("tracks")
                     val items: JSONArray = jsonSongs.getJSONArray(("items"))
                     //I realize this should be a for loop
-                    val song1 : JSONObject = items[0] as JSONObject
-                    var songInfo1 = listOf(song1.getString("uri"), song1.getString("name"), (song1.getJSONArray("artists")[0] as JSONObject).getString("name"))
-                    val song2 : JSONObject = items[1] as JSONObject
-                    var songInfo2 = listOf(song2.getString("uri"), song2.getString("name"), (song2.getJSONArray("artists")[0] as JSONObject).getString("name"))
-                    val song3 : JSONObject = items[2] as JSONObject
-                    var songInfo3 = listOf(song2.getString("uri"), song3.getString("name"), (song3.getJSONArray("artists")[0] as JSONObject).getString("name"))
-                    val printABLE = listOf(songInfo1, songInfo2, songInfo3)
-                    Log.i("Search Result", printABLE.toString())
+                    val printABLE = mutableListOf<List<String>>()
+
+                    if(items.length() <= 0) {
+                        return
+                    }
+
+                    for (i in 1..items.length()) {
+                        val song : JSONObject = items[i-1] as JSONObject
+                        var songInfo = listOf(song.getString("uri"), song.getString("name"), (song.getJSONArray("artists")[0] as JSONObject).getString("name"))
+                        printABLE.add(songInfo)
+                    }
+                    Log.i("Spotify Search Result", printABLE.toString())
+                    //return printABLE.toString()
                 } catch (e: JSONException) {
                     Log.i("MainSearch","Failed to parse data")
                 }
             }
         })
-        //Log.i("HIFUCKER", response.toString())
     }
 
     fun getSongs(){

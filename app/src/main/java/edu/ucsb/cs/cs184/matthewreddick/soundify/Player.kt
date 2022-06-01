@@ -3,12 +3,14 @@ package edu.ucsb.cs.cs184.matthewreddick.soundify
 import android.content.Context
 import android.media.MediaPlayer
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.android.appremote.api.error.SpotifyDisconnectedException
+import com.spotify.protocol.client.Subscription
 import com.spotify.protocol.types.*
 import okhttp3.Credentials
 import okhttp3.FormBody
@@ -62,6 +64,9 @@ class SpotifyPlayer : Player,Serializable {
     private val REDIRECT_URI = "edu.ucsb.cs.cs184.matthewreddick.soundify://callback"
     private var mainContext : Context ?= null
     private val TAG = "SpotifyPlayer Class"
+
+    private var trackWasStarted = false
+
     private val errorCallback = { throwable: Throwable -> logError(throwable) }
     constructor(context: Context, lifecycleScope : LifecycleCoroutineScope) {
         SpotifyAppRemote.setDebugMode(true)
@@ -75,6 +80,7 @@ class SpotifyPlayer : Player,Serializable {
     override fun play() {
         var track_uri = "spotify:track:4IWZsfEkaK49itBwCTFDXQ"
         playUri(track_uri)
+        //trackWasStarted = true
     }
 
     private fun logError(throwable: Throwable) {
@@ -91,6 +97,9 @@ class SpotifyPlayer : Player,Serializable {
             try {
                 spotifyAppRemote = connectToAppRemote(showAuthView)
                 onConnected()
+                spotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback {
+                    handleTrackEnded(it)
+                }
                 Log.i("PlayerClass","Connected")
             } catch (error: Throwable) {
                 disconnect()
@@ -145,12 +154,72 @@ class SpotifyPlayer : Player,Serializable {
     }
 
     private fun playUri(uri: String) {
-        Log.i("hiCOLE","hi")
         assertAppRemoteConnected()
             .playerApi
             .play(uri)
             .setResultCallback { logMessage("Temp") }
             .setErrorCallback(errorCallback)
+    }
+
+    private fun handleTrackEnded (playerState: PlayerState) : Boolean {
+        setTrackWasStarted(playerState)
+
+        val isPaused = playerState.isPaused
+        val position = playerState.playbackPosition
+        val hasEnded = trackWasStarted && isPaused && position == 0L
+
+        if (hasEnded) {
+            trackWasStarted = false
+            // ... do whatever you want to do if track ended
+        }
+        return hasEnded
+    }
+    /*
+    fun onSubscribedToPlayerStateButtonClicked(notUsed: View) {
+        playerStateSubscription = cancelAndResetSubscription(playerStateSubscription)
+
+        binding.currentTrackLabel.visibility = View.VISIBLE
+        binding.subscribeToPlayerStateButton.visibility = View.INVISIBLE
+
+        playerStateSubscription = assertAppRemoteConnected()
+            .playerApi
+            .subscribeToPlayerState()
+            .setEventCallback(playerStateEventCallback)
+            .setLifecycleCallback(
+                object : Subscription.LifecycleCallback {
+                    override fun onStart() {
+                        logMessage("Event: start")
+                    }
+
+                    override fun onStop() {
+                        logMessage("Event: end")
+                    }
+                })
+            .setErrorCallback {
+                binding.currentTrackLabel.visibility = View.INVISIBLE
+                binding.subscribeToPlayerStateButton.visibility = View.VISIBLE
+            } as Subscription<PlayerState>
+    }
+
+    private fun <T : Any?> cancelAndResetSubscription(subscription: Subscription<T>?): Subscription<T>? {
+        return subscription?.let {
+            if (!it.isCanceled) {
+                it.cancel()
+            }
+            null
+        }
+    }
+
+     */
+
+    private fun setTrackWasStarted(playerState: PlayerState) {
+        val position = playerState.playbackPosition
+        val duration = playerState.track.duration
+        val isPlaying = !playerState.isPaused
+
+        if (!trackWasStarted && position > 0 && duration > 0 && isPlaying) {
+            trackWasStarted = true
+        }
     }
 
     //Be sure to pass context
