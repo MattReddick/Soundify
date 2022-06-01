@@ -2,18 +2,19 @@ package edu.ucsb.cs.cs184.matthewreddick.soundify
 
 import android.content.Context
 import android.media.MediaPlayer
-import android.provider.MediaStore
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.lifecycleScope
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
-import com.spotify.protocol.types.*
-import com.spotify.android.appremote.api.ContentApi
 import com.spotify.android.appremote.api.error.SpotifyDisconnectedException
+import com.spotify.protocol.types.*
+import okhttp3.Credentials
+import okhttp3.FormBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import kotlinx.coroutines.launch
 import java.io.Serializable
 import kotlin.coroutines.Continuation
@@ -172,9 +173,59 @@ class SpotifyPlayer : Player,Serializable {
                     }
                 })
         }
-        fun onConnected() {
+    fun onConnected() {
 
+    }
+
+    fun getAccessToken() {
+        val url : String = "https://accounts.spotify.com/api/token"
+        /*
+        val body: RequestBody = RequestBody.create(JSON, json)
+        val request: Request = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+        val response: Response = client.newCall(request).execute()
+        return response.body().string()
+        */
+        /*
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url("https://accounts.spotify.com/api/token")
+            .header("Authorization", "Basic " + (CLIENT_ID + ':' + "5aa7b290fac74bd286c77a8b6bfdc82e"))
+            .build()
+        Log.i("REQUEST", request.toString())
+        var response: Response
+        var result : String? = null
+        try {
+            response = client.newCall(request).execute()
+            result = response.body().string()
+        } catch(e : Exception) {
+            e.printStackTrace()
+            Log.i("ERROR", "request failed")
         }
+        if (result != null) {
+            Log.i("OURTOKENINFO", result)
+        }
+        */
+        //Log.i("OURTOKENINFO",response.body().string())
+        /*
+        var authOptions = {
+            url: 'https://accounts.spotify.com/api/token',
+            form: {
+                code: code,
+                redirect_uri: redirect_uri,
+                grant_type: 'authorization_code'
+        },
+            headers: {
+            'Authorization': 'Basic ' + (new Buffer(CLIENT_ID + ':' + client_secret).toString('base64'))
+        },
+            json: true
+        };
+
+         */
+    }
+
 
 
     /*
