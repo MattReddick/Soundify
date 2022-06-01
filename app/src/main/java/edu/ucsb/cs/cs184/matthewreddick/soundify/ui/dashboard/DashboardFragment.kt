@@ -38,13 +38,6 @@ class DashboardFragment : Fragment(){
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        if(getActivity() != null){
-            val i : Intent? = getActivity()?.getIntent()
-            if (i != null) {
-                mySpotifyPlayer = i.getSerializableExtra("spotifyPlayerObject") as SpotifyPlayer
-                accessToken = i.getStringExtra("tokenObject") as String
-            }
-        }
 
         val playBtn : ImageButton = root.findViewById(R.id.playButton) as ImageButton
         playBtn.setOnClickListener() {

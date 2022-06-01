@@ -155,9 +155,10 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
                 try {
                     val jsonObject = JSONObject(response.body!!.string())
-                    //Log.i("For Cole", jsonObject.toString(3))
+                    //Log.i("Full Search Details", jsonObject.toString(3))
                     val jsonSongs: JSONObject = jsonObject.getJSONObject("tracks")
                     val items: JSONArray = jsonSongs.getJSONArray(("items"))
+                    //I realize this should be a for loop
                     val song1 : JSONObject = items[0] as JSONObject
                     var songInfo1 = listOf(song1.getString("uri"), song1.getString("name"), (song1.getJSONArray("artists")[0] as JSONObject).getString("name"))
                     val song2 : JSONObject = items[1] as JSONObject
