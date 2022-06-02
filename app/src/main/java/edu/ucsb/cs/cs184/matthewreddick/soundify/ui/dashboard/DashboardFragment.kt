@@ -10,11 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import edu.ucsb.cs.cs184.matthewreddick.soundify.MainActivity
 import edu.ucsb.cs.cs184.matthewreddick.soundify.R
 import edu.ucsb.cs.cs184.matthewreddick.soundify.Player
+import edu.ucsb.cs.cs184.matthewreddick.soundify.Song
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentDashboardBinding
 
 
@@ -47,17 +49,48 @@ class DashboardFragment : Fragment(){
             }
             //Log.i("HomeFragment","accessToken")
         }
+        playerObject.setImageView(root.findViewById(R.id.albumCoverImage))
 
-
+        val titleText : TextView = root.findViewById(R.id.songTitleText)
+        val artistText : TextView = root.findViewById(R.id.artistText)
         val playBtn : ImageButton = root.findViewById(R.id.playButton) as ImageButton
         playBtn.setOnClickListener() {
-            if(playerObject != null)
+            if(playerObject != null) {
                 playerObject.pausePlay()
+                val tmpSong : Song? = playerObject.getCurrentSong()
+                if(tmpSong != null) {
+                    titleText.text = tmpSong.getTitle()
+                    artistText.text = tmpSong.getArtist()
+                }
+            }
         }
         val skipForwardBtn : ImageButton = root.findViewById(R.id.skipForwardButton) as ImageButton
         skipForwardBtn.setOnClickListener() {
-            if(playerObject != null)
+            if(playerObject != null) {
                 playerObject.playNext()
+                val tmpSong : Song? = playerObject.getCurrentSong()
+                if(tmpSong != null) {
+                    titleText.text = tmpSong.getTitle()
+                    artistText.text = tmpSong.getArtist()
+                }
+            }
+        }
+        val shuffleBtn : ImageButton = root.findViewById(R.id.shuffleButton) as ImageButton
+        shuffleBtn.setOnClickListener() {
+            if(playerObject != null)
+                playerObject.shuffleQueue()
+        }
+
+        val skipPreviousBtn : ImageButton = root.findViewById(R.id.skipBackButton) as ImageButton
+        skipPreviousBtn.setOnClickListener() {
+            if(playerObject != null) {
+                playerObject.playPrevious()
+                val tmpSong : Song? = playerObject.getCurrentSong()
+                if(tmpSong != null) {
+                    titleText.text = tmpSong.getTitle()
+                    artistText.text = tmpSong.getArtist()
+                }
+            }
         }
 
         //val progressBar = binding.progressBar

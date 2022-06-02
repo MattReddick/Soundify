@@ -41,6 +41,19 @@ class Song(
     fun getUri() : String {
         return audioUrl
     }
+
+    fun getTitle() : String? {
+        return title
+    }
+
+    fun getArtist() : String? {
+        return artist
+    }
+
+    fun getImageUrl() : String? {
+        return imageUrl
+    }
+
     fun isSpotify() : Boolean {
         return isSpotify
     }

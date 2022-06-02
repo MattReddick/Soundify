@@ -68,9 +68,9 @@ class MainActivity : AppCompatActivity() {
         onRequestTokenClicked(binding.root)
         songLibrary = mutableListOf()
         Log.i("songLibrary1", songLibrary.toString())
-        val tmpSong : Song = Song(title = "As it Was", artist = "Harry Styles", "", "", audioUrl = "spotify:track:1OjiYjgPZyxS0AiXiSnuYI", 0, 0, true)
+        val tmpSong : Song = Song(title = "Dear Maria, Count Me In", artist = "All Time Low", "", "", audioUrl = "spotify:track:0JJP0IS4w0fJx01EcrfkDe", 0, 0, true)
         val tmpSoundcloud : Song = Song("Closer", "Chainsmokers", "https://i1.sndcdn.com/artworks-3nETEFJoML7B-0-t500x500.jpg", "", "https://firebasestorage.googleapis.com/v0/b/cs184-soundify.appspot.com/o/Songs%2FCloser.mp3?alt=media&token=9ffae7c6-c766-4487-acaf-8087445ea187", 287,7, false)
-        val tmpSong2 : Song = Song(title = "As it Was", artist = "Harry Styles", "", "", audioUrl = "spotify:track:1R0a2iXumgCiFb7HEZ7gUE", 0, 0, true)
+        val tmpSong2 : Song = Song(title = "Heading South", artist = "Zach Bryan", "", "", audioUrl = "spotify:track:2Dct3GykKZ58hpWRFfe2Qd", 0, 0, true)
         playerObject.addToQueue(tmpSong)
         playerObject.addToQueue(tmpSoundcloud)
         playerObject.addToQueue(tmpSong2)
@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity() {
 
                     for (i in 1..items.length()) {
                         val song : JSONObject = items[i-1] as JSONObject
-                        var songInfo = listOf(song.getString("uri"), song.getString("name"), (song.getJSONArray("artists")[0] as JSONObject).getString("name"))
+                        var songInfo = listOf(song.getString("uri"), song.getString("name"), (song.getJSONArray("artists")[0] as JSONObject).getString("name"), ((song.getInt("duration_ms"))/1000).toString())
                         printABLE.add(songInfo)
                     }
                     Log.i("Spotify Search Result", printABLE.toString())
