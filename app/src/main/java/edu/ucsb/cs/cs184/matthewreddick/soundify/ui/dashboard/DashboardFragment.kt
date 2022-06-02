@@ -52,7 +52,12 @@ class DashboardFragment : Fragment(){
         val playBtn : ImageButton = root.findViewById(R.id.playButton) as ImageButton
         playBtn.setOnClickListener() {
             if(playerObject != null)
-                playerObject.onPlayPauseButtonClicked()
+                playerObject.pausePlay()
+        }
+        val skipForwardBtn : ImageButton = root.findViewById(R.id.skipForwardButton) as ImageButton
+        skipForwardBtn.setOnClickListener() {
+            if(playerObject != null)
+                playerObject.playNext()
         }
 
         //val progressBar = binding.progressBar

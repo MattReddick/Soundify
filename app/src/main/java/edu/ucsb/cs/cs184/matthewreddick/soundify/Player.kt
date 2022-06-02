@@ -1,6 +1,8 @@
 package edu.ucsb.cs.cs184.matthewreddick.soundify
 
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.util.Log
 import android.view.View
@@ -18,6 +20,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.io.Serializable
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -28,8 +31,10 @@ import kotlin.coroutines.suspendCoroutine
 class Player : Serializable {
 
     private var currentSong: Song? = null
+    private var currentSongIndex: Int = -1
     private var queue: ArrayList<Song>? = null
     private var mediaPlayer: MediaPlayer? = null
+    private var length:Int = 0
 
     private var spotifyAppRemote: SpotifyAppRemote? = null
     private val CLIENT_ID = "e01fcf6eba35472bb4aa1db36bf92863"
@@ -37,18 +42,25 @@ class Player : Serializable {
     private val REDIRECT_URI = "edu.ucsb.cs.cs184.matthewreddick.soundify://callback"
     private var mainContext : Context ?= null
     private val TAG = "SpotifyPlayer Class"
+    private var isPlaying : Boolean = false
 
     private var trackWasStartedSpotify = false
 
 
-    private fun playSoundCloud(track_uri : String) {
-
-    }
 
     private val errorCallback = { throwable: Throwable -> logError(throwable) }
     constructor(context: Context, lifecycleScope : LifecycleCoroutineScope) {
         SpotifyAppRemote.setDebugMode(true)
         connect(true, context, lifecycleScope)
+        queue = ArrayList<Song>()
+        mediaPlayer = MediaPlayer()
+        mediaPlayer!!.setAudioAttributes(
+            AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+        )
+
+
     }
 
     private fun logMessage(msg: String, duration: Int = Toast.LENGTH_SHORT) {
@@ -77,7 +89,21 @@ class Player : Serializable {
                 onConnected()
                 spotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback {
                     val hasEnded : Boolean = handleTrackEnded(it)
+                    Log.i("Has Ended", hasEnded.toString())
+                    if(hasEnded==true) {
+                        assertAppRemoteConnected().let {
+                            it.playerApi
+                                .playerState
+                                .setResultCallback { playerState ->
+                                    it.playerApi
+                                        .pause()
+                                        .setResultCallback { logMessage("tmp") }
+                                        .setErrorCallback(errorCallback)
 
+                                }
+                        }
+                        playNext()
+                    }
                 }
                 Log.i("PlayerClass","Connected")
             } catch (error: Throwable) {
@@ -87,6 +113,7 @@ class Player : Serializable {
         }
     }
     fun onPlayPauseButtonClicked() {
+        Log.i("PAUSING1","here")
         assertAppRemoteConnected().let {
             it.playerApi
                 .playerState
@@ -97,6 +124,7 @@ class Player : Serializable {
                             .setResultCallback { logMessage("tmp") }
                             .setErrorCallback(errorCallback)
                     } else {
+                        Log.i("PAUSING","here")
                         it.playerApi
                             .pause()
                             .setResultCallback { logMessage("tmp") }
@@ -120,7 +148,12 @@ class Player : Serializable {
         throw SpotifyDisconnectedException()
     }
 
+    fun addToQueue(songToAdd: Song) {
+        queue?.add(songToAdd)
+    }
+
     private fun playUri(uri: String) {
+        Log.i("Here",uri)
         assertAppRemoteConnected()
             .playerApi
             .play(uri)
@@ -217,5 +250,82 @@ class Player : Serializable {
     fun onConnected() {
 
     }
+
+    fun pausePlay() {
+        Log.i("QUEUE",queue.toString())
+        if (currentSongIndex == -1) {
+            playNext()
+        }
+        else {
+            if (currentSong?.isSpotify() == true) {
+                onPlayPauseButtonClicked()
+                return
+            }
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.pause()
+                length = mediaPlayer?.currentPosition!!
+            } else {
+                mediaPlayer?.seekTo(length)
+                mediaPlayer?.start()
+            }
+        }
+
+    }
+
+    fun playNext() {
+        currentSongIndex += 1
+        currentSong = queue?.get(currentSongIndex)
+        if (currentSong != null) {
+            assertAppRemoteConnected().let {
+                it.playerApi
+                    .playerState
+                    .setResultCallback { playerState ->
+                        if(playerState.isPaused == false) {
+                            it.playerApi
+                                .pause()
+                                .setResultCallback { logMessage("tmp") }
+                                .setErrorCallback(errorCallback)
+                        }
+                    }
+            }
+            if (mediaPlayer!!.isPlaying){
+                mediaPlayer!!.stop()
+            }
+            if (currentSong!!.isSpotify()) {
+                if (currentSong != null) {
+                    playSpotify(currentSong!!.getUri())
+                }
+                else {
+                    Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else {
+                if (currentSong != null) {
+                    playSoundCloud(currentSong!!.getUri())
+                }
+                else {
+                    Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        length = 0
+    }
+
+    private fun playSoundCloud(track_uri : String) {
+        try {
+            mediaPlayer!!.reset()
+            mediaPlayer!!.setDataSource(track_uri)
+            mediaPlayer!!.prepare()
+            mediaPlayer!!.start()
+            mediaPlayer!!.setOnCompletionListener {
+                playNext()
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        Log.v(TAG,"Music is streaming")
+    }
+
+
 
 }
