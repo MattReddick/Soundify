@@ -3,9 +3,6 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/User/Documents/Academics/CS184/Soundify/app/src/main/res/layout/activity_main.xml" value="0.11302083333333333" />
-        <entry key="..\:/Users/User/Documents/Academics/CS184/Soundify/app/src/main/res/layout/fragment_dashboard.xml" value="0.11302083333333333" />
-        <entry key="..\:/Users/User/Documents/Academics/CS184/Soundify/app/src/main/res/layout/fragment_home.xml" value="0.11302083333333333" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/drawable/ic_baseline_loop_24.xml" value="0.1" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/drawable/ic_baseline_music_note_24.xml" value="0.131" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/drawable/ic_baseline_queue_music_24.xml" value="0.131" />
@@ -19,7 +16,7 @@
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/drawable/progress.xml" value="0.1" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/drawable/spotify_queue_item.xml" value="0.109" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/activity_main.xml" value="0.2" />
-        <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/fragment_dashboard.xml" value="0.18" />
+        <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/fragment_dashboard.xml" value="0.33" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/fragment_home.xml" value="0.33" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/fragment_notifications.xml" value="0.1" />
         <entry key="..\:/Users/erwan/AndroidStudioProjects/Soundify/app/src/main/res/layout/soundcloud_item.xml" value="0.33" />

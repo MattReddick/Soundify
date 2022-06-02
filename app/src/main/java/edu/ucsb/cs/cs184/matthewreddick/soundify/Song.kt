@@ -32,8 +32,62 @@ class Song(
         output += "Duration: $duration\n"
         output += "ID: $id\n"
         return output
-
     }
 
+    fun getTitle() : String? {
+        return title
+    }
+
+    fun setTitle(input: String?) {
+        title = input
+    }
+
+    fun getArtist() : String? {
+        return artist
+    }
+
+    fun setArtist(input: String?) {
+        artist = input
+    }
+
+    fun getAlbum() : String? {
+        return album
+    }
+
+    fun setAlbum(input: String?) {
+        album = input
+    }
+
+    fun getImageUrl() : String? {
+        return imageUrl
+    }
+
+    fun setImageUrl(input: String?) {
+        imageUrl = input
+    }
+
+    fun getAudioUrl() : String? {
+        return audioUrl
+    }
+
+    fun setAudioUrl(input: String?) {
+        audioUrl = input
+    }
+
+    fun getDuration() : Int? {
+        return duration
+    }
+
+    fun setDuration(input: Int?) {
+        duration = input
+    }
+
+    fun getId() : Int? {
+        return id
+    }
+
+    fun setId(input: Int?) {
+        id = input
+    }
 
 }

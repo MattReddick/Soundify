@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
             )
         )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        //setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
     private fun getRedirectUri(): Uri? {
@@ -152,7 +152,7 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
                 try {
                     val jsonObject = JSONObject(response.body!!.string())
-                    //Log.i("Full Search Details", jsonObject.toString(3))
+                    Log.i("Full Search Details", jsonObject.toString(3))
                     val jsonSongs: JSONObject = jsonObject.getJSONObject("tracks")
                     val items: JSONArray = jsonSongs.getJSONArray(("items"))
                     //I realize this should be a for loop
@@ -164,6 +164,7 @@ class MainActivity : AppCompatActivity() {
 
                     for (i in 1..items.length()) {
                         val song : JSONObject = items[i-1] as JSONObject
+                        //Log.i("Search detail song " + Integer.toString(i), song.toString(3))
                         var songInfo = listOf(song.getString("uri"), song.getString("name"), (song.getJSONArray("artists")[0] as JSONObject).getString("name"))
                         printABLE.add(songInfo)
                     }
@@ -222,7 +223,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         val song = Song(title, artist, album, imageUrl, audioUrl, duration, id)
                         songLibrary.add(song)
-//                        Log.i("Song", song.toString())
+                        Log.i("Song", song.toString())
                     }
                 }
 
