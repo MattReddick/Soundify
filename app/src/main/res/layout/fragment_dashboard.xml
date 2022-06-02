@@ -107,7 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
-            android:layout_weight="3" >
+            android:layout_weight="4" >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -138,7 +138,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
+            android:layout_weight="2"
             android:orientation="horizontal">
 
             <ImageButton
@@ -171,7 +171,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10"
+            android:layout_weight="5"
             android:orientation="horizontal">
 
             <ImageButton
@@ -197,7 +197,7 @@
         android:id="@+id/BottomMarginForMenu"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10"
+        android:layout_weight="8"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
