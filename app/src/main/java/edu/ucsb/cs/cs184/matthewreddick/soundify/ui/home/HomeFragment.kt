@@ -174,8 +174,11 @@ class HomeFragment : Fragment() {
                     }
                 }
 
+                //printABLE.printABLE.clear()
                 spotifySongs.clear()
-                Log.i("spotifySongs size", spotifySongs.size.toString())
+
+                (activity as MainActivity).searchSpotify(searchBarResults)
+                Log.i("printABLE", printABLE.printABLE.size.toString())
                 for (i in 0..(printABLE.printABLE.size - 1)) {
                     val newSong = Song(printABLE.printABLE[i][0],
                         printABLE.printABLE[i][1],

@@ -169,14 +169,15 @@ class MainActivity : AppCompatActivity() {
 
                     for (i in 1..items.length()) {
                         val song : JSONObject = items[i-1] as JSONObject
-                        var songInfo = listOf(song.getString("name"),
+                        //Log.i("Search detail song " + Integer.toString(i), song.toString(3))
+                        val songInfo = listOf(song.getString("name"),
                             (song.getJSONArray("artists")[0] as JSONObject).getString("name"),
                             song.getString("uri"),
                             (song.getString("duration_ms").toInt()/1000).toString())
                         printABLE.printABLE.add(songInfo)
                     }
-                    Log.i("Spotify Search Result", printABLE.printABLE.toString())
-                    //return printABLE.toString()
+                    //Log.i("Spotify Search Result", printABLE.printABLE.toString())
+                    //return printABLE.printABLE
                 } catch (e: JSONException) {
                     Log.i("MainSearch","Failed to parse data")
                 }
