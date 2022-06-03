@@ -173,7 +173,7 @@ class MainActivity : AppCompatActivity() {
                         printABLE.add(songInfo)
                     }
                     Log.i("Spotify Search Result", printABLE.toString())
-                    //return printABLE.toString()
+
                 } catch (e: JSONException) {
                     Log.i("MainSearch","Failed to parse data")
                 }
