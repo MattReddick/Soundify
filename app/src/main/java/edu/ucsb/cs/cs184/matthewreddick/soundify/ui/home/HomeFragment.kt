@@ -45,14 +45,6 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         val searchBar : EditText = root.findViewById(R.id.search_bar) as EditText
-        searchBar.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                Log.i("SEARCHING", searchBar.text.toString())
-                (activity as MainActivity).searchSpotify(searchBar.text.toString())
-                return@OnEditorActionListener true
-            }
-            false
-        })
         //create 3 songs from soundcloud and spotify and put them in a list
         //then connect them to the home UI for display
 
@@ -159,10 +151,9 @@ class HomeFragment : Fragment() {
 
         searchBar.setOnEditorActionListener {view, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
-                keyEvent == null ||
-                keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
+            keyEvent.action == KeyEvent.ACTION_DOWN || keyEvent.action == KeyEvent.KEYCODE_ENTER) {
 
-                val searchBarResults = (root.findViewById<EditText>(R.id.search_bar) as EditText).text.toString()
+                val searchBarResults = searchBar.text.toString()
 
                 soundcloudSongs.clear()
 
@@ -174,25 +165,25 @@ class HomeFragment : Fragment() {
                     }
                 }
 
-                //printABLE.printABLE.clear()
                 spotifySongs.clear()
 
-                (activity as MainActivity).searchSpotify(searchBarResults)
-                Log.i("printABLE", printABLE.printABLE.size.toString())
-                for (i in 0..(printABLE.printABLE.size - 1)) {
-                    val newSong = Song(printABLE.printABLE[i][0],
-                        printABLE.printABLE[i][1],
+                val temp = (activity as MainActivity).searchSpotify(searchBar.text.toString())
+                Log.i("printABLE", temp.size.toString())
+                for (i in 0..(temp.size - 1)) {
+                    val newSong = Song(temp[i][0],
+                        temp[i][1],
                         "",
                         "",
-                        printABLE.printABLE[i][2],
-                        printABLE.printABLE[i][3].toInt(),
+                        temp[i][2],
+                        temp[i][3].toInt(),
                         i*2,
                     )
                     spotifySongs.add(newSong)
                 }
-                true
+                temp.clear()
+                return@setOnEditorActionListener true
             }
-            false
+            return@setOnEditorActionListener false
         }
 
         spotifyListView.adapter = spotify

@@ -8,6 +8,8 @@
     android:background="@color/black"
     tools:context=".ui.home.HomeFragment">
 
+    <!-- android:inputType="textNoSuggestions|textVisiblePassword" -->
+
     <EditText
         android:id="@+id/search_bar"
         android:background="@color/gray"

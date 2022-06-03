@@ -32,15 +32,12 @@ object songLib {
     lateinit var songLib: MutableList<Song>
 }
 
-object printABLE {
-    var printABLE = mutableListOf<List<String>>()
-}
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var playerObject: Player
     private lateinit var songLibrary: MutableList<Song>
+    private var spotLibrary = mutableListOf<List<String>>()
 
     private lateinit var firebase: FirebaseDatabase
     private lateinit var databaseRef: DatabaseReference
@@ -137,7 +134,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun searchSpotify(input : String) {
+    fun searchSpotify(input : String): MutableList<List<String>> {
         val inputEncoded : String = java.net.URLEncoder.encode(input, "utf-8")
         val myURL : String = "https://api.spotify.com:443/v1/search?q=" + inputEncoded + "&limit=10&market=SE&offset=0&type=track"
         val request = Request.Builder()
@@ -174,7 +171,7 @@ class MainActivity : AppCompatActivity() {
                             (song.getJSONArray("artists")[0] as JSONObject).getString("name"),
                             song.getString("uri"),
                             (song.getString("duration_ms").toInt()/1000).toString())
-                        printABLE.printABLE.add(songInfo)
+                        spotLibrary.add(songInfo)
                     }
                     //Log.i("Spotify Search Result", printABLE.printABLE.toString())
                     //return printABLE.printABLE
@@ -183,6 +180,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+        return spotLibrary
     }
 
     fun getSongs(){
