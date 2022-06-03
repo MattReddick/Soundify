@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.*
@@ -29,6 +28,9 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
+object songLib {
+    lateinit var songLib: MutableList<Song>
+}
 
 class MainActivity : AppCompatActivity() {
 
@@ -164,8 +166,10 @@ class MainActivity : AppCompatActivity() {
 
                     for (i in 1..items.length()) {
                         val song : JSONObject = items[i-1] as JSONObject
-                        //Log.i("Search detail song " + Integer.toString(i), song.toString(3))
-                        var songInfo = listOf(song.getString("uri"), song.getString("name"), (song.getJSONArray("artists")[0] as JSONObject).getString("name"))
+                        var songInfo = listOf(song.getString("uri"),
+                            song.getString("name"),
+                            (song.getJSONArray("artists")[0] as JSONObject).getString("name"),
+                            (song.getString("duration_ms").toInt()/1000).toString())
                         printABLE.add(songInfo)
                     }
                     Log.i("Spotify Search Result", printABLE.toString())
@@ -223,6 +227,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         val song = Song(title, artist, album, imageUrl, audioUrl, duration, id)
                         songLibrary.add(song)
+                        songLib.songLib = songLibrary
                         Log.i("Song", song.toString())
                     }
                 }

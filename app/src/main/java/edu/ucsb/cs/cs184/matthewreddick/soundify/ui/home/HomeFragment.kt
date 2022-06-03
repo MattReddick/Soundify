@@ -3,6 +3,7 @@ package edu.ucsb.cs.cs184.matthewreddick.soundify.ui.home
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,10 +20,12 @@ import edu.ucsb.cs.cs184.matthewreddick.soundify.MainActivity
 import edu.ucsb.cs.cs184.matthewreddick.soundify.R
 import edu.ucsb.cs.cs184.matthewreddick.soundify.Song
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentHomeBinding
+import edu.ucsb.cs.cs184.matthewreddick.soundify.songLib
+import kotlinx.android.synthetic.main.activity_main.*
 
 
-private lateinit var spotifySongs : Array<Song>
-private lateinit var soundcloudSongs : Array<Song>
+private lateinit var spotifySongs : MutableList<Song>
+private lateinit var soundcloudSongs : MutableList<Song>
 
 class HomeFragment : Fragment() {
 
@@ -105,7 +108,7 @@ class HomeFragment : Fragment() {
             "spotify:album:3WFTGIO6E3Xh4paEOBY9OU",
             211,
             3)
-        spotifySongs = arrayOf<Song>(spotifySong1, spotifySong2, spotifySong3)
+        spotifySongs = mutableListOf(spotifySong1, spotifySong2, spotifySong3)
 
         //Artist: Mike Snow
         //    Album:
@@ -149,18 +152,62 @@ class HomeFragment : Fragment() {
             "https://firebasestorage.googleapis.com/v0/b/cs184-soundify.appspot.com/o/Songs%2FLawOfAttraction.mp3?alt=media&token=1a7f8dc2-660f-444c-afe0-aa184f0482af",
             207,
             4)
-        soundcloudSongs = arrayOf<Song>(soundCloudSong1, soundCloudSong2, soundCloudSong3)
+        soundcloudSongs = mutableListOf(soundCloudSong1, soundCloudSong2, soundCloudSong3)
 
         val spotifyListView = binding.spotifyList
         val soundcloudListView = binding.soundcloudList
 
+        var soundCloud: customAdapterSoundCloud = customAdapterSoundCloud()
+
+        searchBar.setOnEditorActionListener {view, actionId, keyEvent ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
+                keyEvent == null ||
+                keyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
+
+                val searchBarResults = (root.findViewById<EditText>(R.id.search_bar) as EditText).text.toString()
+
+                soundcloudSongs.clear()
+
+                for (i in 0..(songLib.songLib.size - 1)) {
+                    if (countMatches(songLib.songLib[i].getArtist()!!.lowercase(), searchBarResults) > 0 ||
+                        countMatches(songLib.songLib[i].getTitle()!!.lowercase(), searchBarResults) > 0 ||
+                        countMatches(songLib.songLib[i].getAlbum()!!.lowercase(), searchBarResults) > 0) {
+                        soundcloudSongs.add(songLib.songLib[i])
+                    }
+                }
+
+                Log.i("editTextDone", "edit text has just finished" + searchBarResults.toString())
+                var soundCloud: customAdapterSoundCloud = customAdapterSoundCloud()
+
+                true
+            }
+            false
+        }
+
+
         var spotify: customAdapterSpotify = customAdapterSpotify()
         spotifyListView.adapter = spotify
-
-        var soundCloud: customAdapterSoundCloud = customAdapterSoundCloud()
         soundcloudListView.adapter = soundCloud
 
         return root
+    }
+
+    fun countMatches(string: String, pattern: String): Int {
+        var index = 0
+        var count = 0
+
+        while (true)
+        {
+            index = string.indexOf(pattern, index)
+            index += if (index != -1)
+            {
+                count++
+                pattern.length
+            }
+            else {
+                return count
+            }
+        }
     }
 
     class customAdapterSpotify: BaseAdapter() {
