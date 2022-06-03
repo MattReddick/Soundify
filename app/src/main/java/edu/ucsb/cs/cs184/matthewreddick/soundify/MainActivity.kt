@@ -32,6 +32,10 @@ object songLib {
     lateinit var songLib: MutableList<Song>
 }
 
+object printABLE {
+    var printABLE = mutableListOf<List<String>>()
+}
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -135,7 +139,7 @@ class MainActivity : AppCompatActivity() {
 
     fun searchSpotify(input : String) {
         val inputEncoded : String = java.net.URLEncoder.encode(input, "utf-8")
-        val myURL : String = "https://api.spotify.com:443/v1/search?q=" + inputEncoded + "&limit=3&market=SE&offset=0&type=track"
+        val myURL : String = "https://api.spotify.com:443/v1/search?q=" + inputEncoded + "&limit=10&market=SE&offset=0&type=track"
         val request = Request.Builder()
             .url(myURL)
             .header(
@@ -158,7 +162,6 @@ class MainActivity : AppCompatActivity() {
                     val jsonSongs: JSONObject = jsonObject.getJSONObject("tracks")
                     val items: JSONArray = jsonSongs.getJSONArray(("items"))
                     //I realize this should be a for loop
-                    val printABLE = mutableListOf<List<String>>()
 
                     if(items.length() <= 0) {
                         return
@@ -166,13 +169,13 @@ class MainActivity : AppCompatActivity() {
 
                     for (i in 1..items.length()) {
                         val song : JSONObject = items[i-1] as JSONObject
-                        var songInfo = listOf(song.getString("uri"),
-                            song.getString("name"),
+                        var songInfo = listOf(song.getString("name"),
                             (song.getJSONArray("artists")[0] as JSONObject).getString("name"),
+                            song.getString("uri"),
                             (song.getString("duration_ms").toInt()/1000).toString())
-                        printABLE.add(songInfo)
+                        printABLE.printABLE.add(songInfo)
                     }
-                    Log.i("Spotify Search Result", printABLE.toString())
+                    Log.i("Spotify Search Result", printABLE.printABLE.toString())
                     //return printABLE.toString()
                 } catch (e: JSONException) {
                     Log.i("MainSearch","Failed to parse data")

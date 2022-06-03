@@ -16,11 +16,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
-import edu.ucsb.cs.cs184.matthewreddick.soundify.MainActivity
-import edu.ucsb.cs.cs184.matthewreddick.soundify.R
-import edu.ucsb.cs.cs184.matthewreddick.soundify.Song
+import edu.ucsb.cs.cs184.matthewreddick.soundify.*
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentHomeBinding
-import edu.ucsb.cs.cs184.matthewreddick.soundify.songLib
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -158,6 +155,7 @@ class HomeFragment : Fragment() {
         val soundcloudListView = binding.soundcloudList
 
         var soundCloud: customAdapterSoundCloud = customAdapterSoundCloud()
+        var spotify: customAdapterSpotify = customAdapterSpotify()
 
         searchBar.setOnEditorActionListener {view, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
@@ -176,16 +174,24 @@ class HomeFragment : Fragment() {
                     }
                 }
 
-                Log.i("editTextDone", "edit text has just finished" + searchBarResults.toString())
-                var soundCloud: customAdapterSoundCloud = customAdapterSoundCloud()
-
+                spotifySongs.clear()
+                Log.i("spotifySongs size", spotifySongs.size.toString())
+                for (i in 0..(printABLE.printABLE.size - 1)) {
+                    val newSong = Song(printABLE.printABLE[i][0],
+                        printABLE.printABLE[i][1],
+                        "",
+                        "",
+                        printABLE.printABLE[i][2],
+                        printABLE.printABLE[i][3].toInt(),
+                        i*2,
+                    )
+                    spotifySongs.add(newSong)
+                }
                 true
             }
             false
         }
 
-
-        var spotify: customAdapterSpotify = customAdapterSpotify()
         spotifyListView.adapter = spotify
         soundcloudListView.adapter = soundCloud
 
