@@ -9,10 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.BaseAdapter
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
 import android.widget.TextView.OnEditorActionListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -259,6 +256,7 @@ class HomeFragment : Fragment() {
             val addToQueueBtn = myView.findViewById<ImageButton>(R.id.addToQueue)
             addToQueueBtn.setOnClickListener() {
                 playerObject.addToQueue(spotifySongs[p0])
+                Log.i("song clicked!", "song clicked!")
             }
             return myView
         }
