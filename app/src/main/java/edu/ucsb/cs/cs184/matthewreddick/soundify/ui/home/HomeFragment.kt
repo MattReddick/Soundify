@@ -1,6 +1,7 @@
 package edu.ucsb.cs.cs184.matthewreddick.soundify.ui.home
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.BaseAdapter
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import androidx.fragment.app.Fragment
@@ -32,6 +34,7 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var accessToken : String
+    //private lateinit var playerObject : Player
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,21 +85,21 @@ class HomeFragment : Fragment() {
             "https://i.scdn.co/image/ab67616d0000b273f52f6a4706fea3bde44467c3",
             "spotify:album:1YA0gAfV91LkDq1DODSCbc",
             149,
-            1)
+            1, true)
         val spotifySong2 = Song("Homecoming",
             "Kanye West",
             "Graduation",
             "https://i.scdn.co/image/ab67616d0000b27326f7f19c7f0381e56156c94a",
             "spotify:album:4SZko61aMnmgvNhfhgTuD3",
             203,
-            2)
+            2, true)
         val spotifySong3 = Song("Heartless",
             "Kanye West",
             "808's and Heartbreak",
             "https://i.scdn.co/image/ab67616d0000b273346d77e155d854735410ed18",
             "spotify:album:3WFTGIO6E3Xh4paEOBY9OU",
             211,
-            3)
+            3, true)
         spotifySongs = mutableListOf(spotifySong1, spotifySong2, spotifySong3)
 
         //Artist: Mike Snow
@@ -126,23 +129,32 @@ class HomeFragment : Fragment() {
             "https://i1.sndcdn.com/artworks-000001914954-vh5avg-t500x500.jpg",
             "https://firebasestorage.googleapis.com/v0/b/cs184-soundify.appspot.com/o/Songs%2FAnimal.mp3?alt=media&token=448477d5-778f-4b44-8c2b-47aa626081ed",
             263,
-            10)
+            10, false)
         val soundCloudSong2 = Song("Closer",
             "ChainSmokers",
             "Single",
             "https://i1.sndcdn.com/artworks-000185496921-4ios1m-t500x500.jpg",
             "https://firebasestorage.googleapis.com/v0/b/cs184-soundify.appspot.com/o/Songs%2FCloser.mp3?alt=media&token=9ffae7c6-c766-4487-acaf-8087445ea187",
             160,
-            6)
+            6,false)
         val soundCloudSong3 = Song("Law Of Attraction",
             "Kanye West",
             "N/A",
             "https://i1.sndcdn.com/artworks-FGiyFZ0Q2crsCIZB-ahkovQ-t500x500.jpg",
             "https://firebasestorage.googleapis.com/v0/b/cs184-soundify.appspot.com/o/Songs%2FLawOfAttraction.mp3?alt=media&token=1a7f8dc2-660f-444c-afe0-aa184f0482af",
             207,
-            4)
+            4, false)
         soundcloudSongs = mutableListOf(soundCloudSong1, soundCloudSong2, soundCloudSong3)
+        /*
+        if(getActivity() != null){
+            val i : Intent? = getActivity()?.getIntent()
+            if (i != null) {
+                playerObject = i.getSerializableExtra("playerObject") as Player
+            }
+            //Log.i("HomeFragment","accessToken")
+        }
 
+         */
         val spotifyListView = binding.spotifyList
         val soundcloudListView = binding.soundcloudList
 
@@ -177,7 +189,7 @@ class HomeFragment : Fragment() {
                         "",
                         temp[i][2],
                         temp[i][3].toInt(),
-                        i*2,
+                        i*2, true
                     )
                     spotifySongs.add(newSong)
                 }
@@ -244,6 +256,10 @@ class HomeFragment : Fragment() {
             val myView = li.inflate(R.layout.spotify_item, null)
             val songText: TextView = myView.findViewById(R.id.songTextName)
             songText.text = spotifySongs[p0].getTitle() + " - " + spotifySongs[p0].getArtist()
+            val addToQueueBtn = myView.findViewById<ImageButton>(R.id.addToQueue)
+            addToQueueBtn.setOnClickListener() {
+                playerObject.addToQueue(spotifySongs[p0])
+            }
             return myView
         }
     }
@@ -281,6 +297,10 @@ class HomeFragment : Fragment() {
             val myView = li.inflate(R.layout.soundcloud_item, null)
             val songText: TextView = myView.findViewById(R.id.songTextName)
             songText.text = soundcloudSongs[p0].getTitle() + " - " + soundcloudSongs[p0].getArtist()
+            val addToQueueBtn = myView.findViewById<ImageButton>(R.id.addToQueue)
+            addToQueueBtn.setOnClickListener() {
+                playerObject.addToQueue(soundcloudSongs[p0])
+            }
             return myView
         }
     }

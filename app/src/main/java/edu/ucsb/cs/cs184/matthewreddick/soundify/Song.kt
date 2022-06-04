@@ -12,15 +12,17 @@ class Song(
     imageUrl: String,
     audioUrl: String,
     duration: Int,
-    id: Int
+    id: Int,
+    isSpotify: Boolean
 ) {
     private var title :String? = title
     private var artist: String? = artist
     private var album: String? = album
     private var imageUrl: String? = imageUrl
-    private var audioUrl: String? = audioUrl
+    private var audioUrl: String = audioUrl
     private var duration: Int? = duration
     private var id: Int? = id
+    private var isSpotify: Boolean = isSpotify
 
     override fun toString(): String {
         var output = ""
@@ -31,6 +33,7 @@ class Song(
         output += "AudioUrl: $audioUrl\n"
         output += "Duration: $duration\n"
         output += "ID: $id\n"
+        output += "IsSpotify: $isSpotify\n"
         return output
     }
 
@@ -38,56 +41,31 @@ class Song(
         return title
     }
 
-    fun setTitle(input: String?) {
-        title = input
-    }
-
     fun getArtist() : String? {
         return artist
-    }
-
-    fun setArtist(input: String?) {
-        artist = input
     }
 
     fun getAlbum() : String? {
         return album
     }
 
-    fun setAlbum(input: String?) {
-        album = input
-    }
-
     fun getImageUrl() : String? {
         return imageUrl
     }
 
-    fun setImageUrl(input: String?) {
-        imageUrl = input
-    }
-
-    fun getAudioUrl() : String? {
+    fun getUri() : String {
         return audioUrl
-    }
-
-    fun setAudioUrl(input: String?) {
-        audioUrl = input
     }
 
     fun getDuration() : Int? {
         return duration
     }
 
-    fun setDuration(input: Int?) {
-        duration = input
-    }
-
     fun getId() : Int? {
         return id
     }
 
-    fun setId(input: Int?) {
-        id = input
+    fun isSpotify() : Boolean {
+        return isSpotify
     }
-
 }

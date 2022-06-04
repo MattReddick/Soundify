@@ -32,10 +32,11 @@ object songLib {
     lateinit var songLib: MutableList<Song>
 }
 
+lateinit var playerObject: Player
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var playerObject: Player
     private lateinit var songLibrary: MutableList<Song>
     private var spotLibrary = mutableListOf<List<String>>()
 
@@ -74,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         getSongs()
         Log.i("songLibrary2", songLibrary.toString())
 
-        getIntent().putExtra("playerObject", playerObject)
+        //getIntent().putExtra("playerObject", playerObject)
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
@@ -227,7 +228,7 @@ class MainActivity : AppCompatActivity() {
                                 }
                             }
                         }
-                        val song = Song(title, artist, album, imageUrl, audioUrl, duration, id)
+                        val song = Song(title, artist, album, imageUrl, audioUrl, duration, id, false)
                         songLibrary.add(song)
                         songLib.songLib = songLibrary
                         Log.i("Song", song.toString())
