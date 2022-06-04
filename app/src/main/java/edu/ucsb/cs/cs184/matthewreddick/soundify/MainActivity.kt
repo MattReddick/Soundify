@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.*
@@ -29,12 +28,16 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
+object songLib {
+    lateinit var songLib: MutableList<Song>
+}
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var playerObject: Player
     private lateinit var songLibrary: MutableList<Song>
+    private var spotLibrary = mutableListOf<List<String>>()
 
     private lateinit var firebase: FirebaseDatabase
     private lateinit var databaseRef: DatabaseReference
@@ -131,9 +134,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun searchSpotify(input : String) {
+    fun searchSpotify(input : String): MutableList<List<String>> {
         val inputEncoded : String = java.net.URLEncoder.encode(input, "utf-8")
-        val myURL : String = "https://api.spotify.com:443/v1/search?q=" + inputEncoded + "&limit=3&market=SE&offset=0&type=track"
+        val myURL : String = "https://api.spotify.com:443/v1/search?q=" + inputEncoded + "&limit=10&market=SE&offset=0&type=track"
         val request = Request.Builder()
             .url(myURL)
             .header(
@@ -156,7 +159,6 @@ class MainActivity : AppCompatActivity() {
                     val jsonSongs: JSONObject = jsonObject.getJSONObject("tracks")
                     val items: JSONArray = jsonSongs.getJSONArray(("items"))
                     //I realize this should be a for loop
-                    val printABLE = mutableListOf<List<String>>()
 
                     if(items.length() <= 0) {
                         return
@@ -165,16 +167,20 @@ class MainActivity : AppCompatActivity() {
                     for (i in 1..items.length()) {
                         val song : JSONObject = items[i-1] as JSONObject
                         //Log.i("Search detail song " + Integer.toString(i), song.toString(3))
-                        var songInfo = listOf(song.getString("uri"), song.getString("name"), (song.getJSONArray("artists")[0] as JSONObject).getString("name"))
-                        printABLE.add(songInfo)
+                        val songInfo = listOf(song.getString("name"),
+                            (song.getJSONArray("artists")[0] as JSONObject).getString("name"),
+                            song.getString("uri"),
+                            (song.getString("duration_ms").toInt()/1000).toString())
+                        spotLibrary.add(songInfo)
                     }
-                    Log.i("Spotify Search Result", printABLE.toString())
-                    //return printABLE.toString()
+                    //Log.i("Spotify Search Result", printABLE.printABLE.toString())
+                    //return printABLE.printABLE
                 } catch (e: JSONException) {
                     Log.i("MainSearch","Failed to parse data")
                 }
             }
         })
+        return spotLibrary
     }
 
     fun getSongs(){
@@ -223,6 +229,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         val song = Song(title, artist, album, imageUrl, audioUrl, duration, id)
                         songLibrary.add(song)
+                        songLib.songLib = songLibrary
                         Log.i("Song", song.toString())
                     }
                 }
