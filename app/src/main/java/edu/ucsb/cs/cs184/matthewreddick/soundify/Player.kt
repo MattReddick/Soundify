@@ -1,24 +1,24 @@
 package edu.ucsb.cs.cs184.matthewreddick.soundify
 
 import android.content.Context
+import android.graphics.BitmapFactory
+import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.util.Log
-import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.spotify.android.appremote.api.ConnectionParams
 import com.spotify.android.appremote.api.Connector
 import com.spotify.android.appremote.api.SpotifyAppRemote
 import com.spotify.android.appremote.api.error.SpotifyDisconnectedException
-import com.spotify.protocol.client.Subscription
 import com.spotify.protocol.types.*
-import okhttp3.Credentials
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.io.Serializable
+import java.net.URL
+import java.util.*
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -28,8 +28,11 @@ import kotlin.coroutines.suspendCoroutine
 class Player : Serializable {
 
     private var currentSong: Song? = null
+    private var currentSongIndex: Int = -1
     private var queue: ArrayList<Song>? = null
     private var mediaPlayer: MediaPlayer? = null
+    private var length:Int = 0
+    private var imageView : ImageView? = null
 
     private var spotifyAppRemote: SpotifyAppRemote? = null
     private val CLIENT_ID = "e01fcf6eba35472bb4aa1db36bf92863"
@@ -37,18 +40,24 @@ class Player : Serializable {
     private val REDIRECT_URI = "edu.ucsb.cs.cs184.matthewreddick.soundify://callback"
     private var mainContext : Context ?= null
     private val TAG = "SpotifyPlayer Class"
+    private var isPlaying : Boolean = false
 
     private var trackWasStartedSpotify = false
 
 
-    private fun playSoundCloud(track_uri : String) {
-
-    }
 
     private val errorCallback = { throwable: Throwable -> logError(throwable) }
     constructor(context: Context, lifecycleScope : LifecycleCoroutineScope) {
         SpotifyAppRemote.setDebugMode(true)
         connect(true, context, lifecycleScope)
+        queue = ArrayList<Song>()
+        mediaPlayer = MediaPlayer()
+        mediaPlayer!!.setAudioAttributes(
+            AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+        )
+
     }
 
     private fun logMessage(msg: String, duration: Int = Toast.LENGTH_SHORT) {
@@ -59,6 +68,16 @@ class Player : Serializable {
     fun playSpotify(track_uri : String) {
         playUri(track_uri)
         //trackWasStarted = true
+    }
+
+    fun shuffleQueue() {
+        if(currentSongIndex < ((queue?.size) as Int) - 1) {
+            Collections.shuffle(queue?.subList(currentSongIndex + 1, (queue?.size!!)))
+            Log.i("QUEUE", queue.toString())
+        }
+        else {
+            Toast.makeText(mainContext, "Add songs to queue", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun logError(throwable: Throwable) {
@@ -77,7 +96,22 @@ class Player : Serializable {
                 onConnected()
                 spotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback {
                     val hasEnded : Boolean = handleTrackEnded(it)
+                    Log.i("Has Ended", hasEnded.toString())
+                    if(hasEnded==true) {
+                        assertAppRemoteConnected().let {
+                            it.playerApi
+                                .playerState
+                                .setResultCallback { playerState ->
+                                    it.playerApi
+                                        .pause()
+                                        .setResultCallback { logMessage("tmp") }
+                                        .setErrorCallback(errorCallback)
 
+                                }
+                        }
+                        playNext()
+                    }
+                    updateTrackCoverArtSpotify(it)
                 }
                 Log.i("PlayerClass","Connected")
             } catch (error: Throwable) {
@@ -87,6 +121,7 @@ class Player : Serializable {
         }
     }
     fun onPlayPauseButtonClicked() {
+        Log.i("PAUSING1","here")
         assertAppRemoteConnected().let {
             it.playerApi
                 .playerState
@@ -97,6 +132,7 @@ class Player : Serializable {
                             .setResultCallback { logMessage("tmp") }
                             .setErrorCallback(errorCallback)
                     } else {
+                        Log.i("PAUSING","here")
                         it.playerApi
                             .pause()
                             .setResultCallback { logMessage("tmp") }
@@ -120,7 +156,12 @@ class Player : Serializable {
         throw SpotifyDisconnectedException()
     }
 
+    fun addToQueue(songToAdd: Song) {
+        queue?.add(songToAdd)
+    }
+
     private fun playUri(uri: String) {
+        Log.i("Here",uri)
         assertAppRemoteConnected()
             .playerApi
             .play(uri)
@@ -144,43 +185,6 @@ class Player : Serializable {
         }
         return hasEnded
     }
-    /*
-    fun onSubscribedToPlayerStateButtonClicked(notUsed: View) {
-        playerStateSubscription = cancelAndResetSubscription(playerStateSubscription)
-
-        binding.currentTrackLabel.visibility = View.VISIBLE
-        binding.subscribeToPlayerStateButton.visibility = View.INVISIBLE
-
-        playerStateSubscription = assertAppRemoteConnected()
-            .playerApi
-            .subscribeToPlayerState()
-            .setEventCallback(playerStateEventCallback)
-            .setLifecycleCallback(
-                object : Subscription.LifecycleCallback {
-                    override fun onStart() {
-                        logMessage("Event: start")
-                    }
-
-                    override fun onStop() {
-                        logMessage("Event: end")
-                    }
-                })
-            .setErrorCallback {
-                binding.currentTrackLabel.visibility = View.INVISIBLE
-                binding.subscribeToPlayerStateButton.visibility = View.VISIBLE
-            } as Subscription<PlayerState>
-    }
-
-    private fun <T : Any?> cancelAndResetSubscription(subscription: Subscription<T>?): Subscription<T>? {
-        return subscription?.let {
-            if (!it.isCanceled) {
-                it.cancel()
-            }
-            null
-        }
-    }
-
-     */
 
     private fun setTrackWasStarted(playerState: PlayerState) {
         val duration = playerState.track.duration
@@ -218,4 +222,149 @@ class Player : Serializable {
 
     }
 
+    fun getCurrentSong() : Song? {
+        return currentSong
+    }
+
+    fun pausePlay() {
+        Log.i("QUEUE",queue.toString())
+        if (currentSongIndex == -1) {
+            playNext()
+        }
+        else {
+            if (currentSong?.isSpotify() == true) {
+                onPlayPauseButtonClicked()
+                return
+            }
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.pause()
+                length = mediaPlayer?.currentPosition!!
+            } else {
+                mediaPlayer?.seekTo(length)
+                mediaPlayer?.start()
+            }
+        }
+
+    }
+
+    fun playNext() {
+        currentSongIndex += 1
+        if(currentSongIndex == queue?.size) {
+            currentSongIndex -= 1
+            Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
+            assertAppRemoteConnected().let {
+                it.playerApi
+                    .playerState
+                    .setResultCallback { playerState ->
+                        if(playerState.isPaused == false) {
+                            it.playerApi
+                                .pause()
+                                .setResultCallback { logMessage("tmp") }
+                                .setErrorCallback(errorCallback)
+                        }
+                    }
+            }
+            if (mediaPlayer!!.isPlaying){
+                mediaPlayer!!.stop()
+            }
+            return
+        }
+        currentSong = queue?.get(currentSongIndex)
+        if (currentSong != null) {
+            assertAppRemoteConnected().let {
+                it.playerApi
+                    .playerState
+                    .setResultCallback { playerState ->
+                        if(playerState.isPaused == false) {
+                            it.playerApi
+                                .pause()
+                                .setResultCallback { logMessage("tmp") }
+                                .setErrorCallback(errorCallback)
+                        }
+                    }
+            }
+            if (mediaPlayer!!.isPlaying){
+                mediaPlayer!!.stop()
+            }
+            if (currentSong!!.isSpotify()) {
+                if (currentSong != null) {
+                    playSpotify(currentSong!!.getUri())
+                }
+                else {
+                    Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else {
+                if (currentSong != null) {
+                    playSoundCloud(currentSong!!.getUri())
+                    updateTrackCoverArtSoundCloud()
+                }
+                else {
+                    Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        length = 0
+    }
+
+    private fun playSoundCloud(track_uri : String) {
+        try {
+            mediaPlayer!!.reset()
+            mediaPlayer!!.setDataSource(track_uri)
+            mediaPlayer!!.prepare()
+            mediaPlayer!!.start()
+            mediaPlayer!!.setOnCompletionListener {
+                playNext()
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        Log.v(TAG,"Music is streaming")
+    }
+
+    public fun setImageView(newImageView : ImageView) {
+        imageView = newImageView
+    }
+
+    private fun updateTrackCoverArtSpotify(playerState: PlayerState) {
+        // Get image from track
+        if(imageView != null) {
+            assertAppRemoteConnected()
+                .imagesApi
+                .getImage(playerState.track.imageUri, Image.Dimension.LARGE)
+                .setResultCallback { bitmap ->
+                    imageView!!.setImageBitmap(bitmap)
+                }
+        }
+    }
+
+    fun playPrevious() {
+        if(currentSongIndex <= 0){
+            if(currentSongIndex == -1) {
+                Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                currentSongIndex += -1
+                playNext()
+            }
+        }
+        else {
+            currentSongIndex += -2
+            playNext()
+        }
+
+    }
+
+    private fun updateTrackCoverArtSoundCloud() {
+        if(currentSong?.getImageUrl()?.length == 0){
+            imageView!!.setImageBitmap(null)
+            imageView!!.destroyDrawingCache()
+        }
+        else {
+            val url ="http" + ((currentSong?.getImageUrl())?.substring(5))
+            Picasso.get().load(url).into(imageView);
+        }
+    }
+
 }
+
