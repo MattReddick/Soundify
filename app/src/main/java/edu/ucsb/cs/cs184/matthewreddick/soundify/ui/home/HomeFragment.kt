@@ -168,6 +168,7 @@ class HomeFragment : Fragment() {
                 spotifySongs.clear()
 
                 val temp = (activity as MainActivity).searchSpotify(searchBar.text.toString())
+                Thread.sleep(1000)
                 Log.i("printABLE", temp.size.toString())
                 for (i in 0..(temp.size - 1)) {
                     val newSong = Song(temp[i][0],
