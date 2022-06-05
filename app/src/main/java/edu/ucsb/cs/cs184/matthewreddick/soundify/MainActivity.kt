@@ -32,13 +32,12 @@ object songLib {
     lateinit var songLib: MutableList<Song>
 }
 
-lateinit var playerObject: Player
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var songLibrary: MutableList<Song>
     private var spotLibrary = mutableListOf<List<String>>()
+    private lateinit var playerObject: Player
 
     private lateinit var firebase: FirebaseDatabase
     private lateinit var databaseRef: DatabaseReference
@@ -75,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         getSongs()
         Log.i("songLibrary2", songLibrary.toString())
 
-        //getIntent().putExtra("playerObject", playerObject)
+        getIntent().putExtra("playerObject", playerObject)
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each

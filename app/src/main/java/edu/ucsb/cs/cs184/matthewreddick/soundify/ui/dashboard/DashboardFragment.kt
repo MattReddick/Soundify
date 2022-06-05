@@ -27,6 +27,7 @@ class DashboardFragment : Fragment(){
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private lateinit var playerObject: Player
     //private lateinit var playerObject : Player
     //DELETE BELOW LATER ON JUST FOR TEST
     private lateinit var accessToken : String
@@ -41,7 +42,7 @@ class DashboardFragment : Fragment(){
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        /*
+
         if(getActivity() != null){
             val i : Intent? = getActivity()?.getIntent()
             if (i != null) {
@@ -50,7 +51,6 @@ class DashboardFragment : Fragment(){
             //Log.i("HomeFragment","accessToken")
         }
 
-         */
         /*
         val url = "https://i1.sndcdn.com/artworks-000185496921-4ios1m-t500x500.jpg"
         Log.i("urlupdate", url)

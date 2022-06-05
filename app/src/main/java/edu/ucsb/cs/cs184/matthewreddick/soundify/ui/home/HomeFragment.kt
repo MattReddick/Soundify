@@ -30,6 +30,7 @@ class HomeFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    lateinit var playerObject: Player
     private lateinit var accessToken : String
     //private lateinit var playerObject : Player
 
@@ -142,7 +143,7 @@ class HomeFragment : Fragment() {
             207,
             4, false)
         soundcloudSongs = mutableListOf(soundCloudSong1, soundCloudSong2, soundCloudSong3)
-        /*
+
         if(getActivity() != null){
             val i : Intent? = getActivity()?.getIntent()
             if (i != null) {
@@ -151,7 +152,6 @@ class HomeFragment : Fragment() {
             //Log.i("HomeFragment","accessToken")
         }
 
-         */
         val spotifyListView = binding.spotifyList
         val soundcloudListView = binding.soundcloudList
 
