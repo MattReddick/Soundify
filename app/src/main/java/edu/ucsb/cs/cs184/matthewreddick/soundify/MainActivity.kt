@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         songLibrary = mutableListOf()
         Log.i("songLibrary1", songLibrary.toString())
         val tmpSong : Song = Song(title = "Dear Maria, Count Me In", artist = "All Time Low", "", "", audioUrl = "spotify:track:0JJP0IS4w0fJx01EcrfkDe", 0, 0, true)
-        val tmpSoundcloud : Song = Song("Closer", "Chainsmokers", "https://i1.sndcdn.com/artworks-3nETEFJoML7B-0-t500x500.jpg", "", "https://firebasestorage.googleapis.com/v0/b/cs184-soundify.appspot.com/o/Songs%2FCloser.mp3?alt=media&token=9ffae7c6-c766-4487-acaf-8087445ea187", 287,7, false)
+        val tmpSoundcloud : Song = Song("Closer", "Chainsmokers", "", "https://i1.sndcdn.com/artworks-000185496921-4ios1m-t500x500.jpg", "https://firebasestorage.googleapis.com/v0/b/cs184-soundify.appspot.com/o/Songs%2FCloser.mp3?alt=media&token=9ffae7c6-c766-4487-acaf-8087445ea187", 160,6, false)
         val tmpSong2 : Song = Song(title = "Heading South", artist = "Zach Bryan", "", "", audioUrl = "spotify:track:2Dct3GykKZ58hpWRFfe2Qd", 0, 0, true)
         playerObject.addToQueue(tmpSong)
         playerObject.addToQueue(tmpSoundcloud)
