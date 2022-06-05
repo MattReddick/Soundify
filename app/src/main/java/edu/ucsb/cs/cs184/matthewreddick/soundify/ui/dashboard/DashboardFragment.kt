@@ -5,14 +5,17 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.ColorFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.squareup.picasso.Picasso
 import edu.ucsb.cs.cs184.matthewreddick.soundify.*
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentDashboardBinding
 
@@ -48,7 +51,13 @@ class DashboardFragment : Fragment(){
         }
 
          */
+        /*
+        val url = "https://i1.sndcdn.com/artworks-000185496921-4ios1m-t500x500.jpg"
+        Log.i("urlupdate", url)
+        Log.i("urlupdate", root.findViewById<ImageView>(R.id.albumCoverImage).toString())
+        Picasso.get().load(url).into(root.findViewById<ImageView>(R.id.albumCoverImage))
         playerObject.setImageView(root.findViewById(R.id.albumCoverImage))
+        */
 
         val titleText : TextView = root.findViewById(R.id.songTitleText)
         val artistText : TextView = root.findViewById(R.id.artistText)
