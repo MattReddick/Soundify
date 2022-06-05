@@ -364,7 +364,7 @@ class Player : Serializable {
             val url ="http" + ((currentSong?.getImageUrl())?.substring(5))
             Log.i("urlupdate", url)
             Log.i("urlupdate", imageView.toString())
-            Picasso.get().load(url).into(imageView);
+            Picasso.get().load(url).into(imageView)
         }
     }
 
