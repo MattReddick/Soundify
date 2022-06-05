@@ -29,7 +29,7 @@ class Player : Serializable {
 
     private var currentSong: Song? = null
     private var currentSongIndex: Int = -1
-    private var queue: ArrayList<Song>? = null
+    var queue: ArrayList<Song>? = null
     private var mediaPlayer: MediaPlayer? = null
     private var length:Int = 0
     private var imageView : ImageView? = null
@@ -307,7 +307,7 @@ class Player : Serializable {
         length = 0
     }
 
-    private fun playSoundCloud(track_uri : String) {
+    fun playSoundCloud(track_uri : String) {
         try {
             mediaPlayer!!.reset()
             mediaPlayer!!.setDataSource(track_uri)

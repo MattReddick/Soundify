@@ -14,7 +14,7 @@
         android:layout_height="0dp"
         android:layout_weight = "10"
         android:orientation="vertical"
-        android:background="@color/gray"
+        android:background="#242121"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
@@ -37,6 +37,7 @@
             android:layout_marginRight="100dp"
             android:gravity="center_horizontal"
             android:text="Queue"
+            android:textColor="@color/white"
             android:textAlignment="center"
             android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.ColorFilter
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
 import edu.ucsb.cs.cs184.matthewreddick.soundify.*
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentDashboardBinding
+import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 
 
 class DashboardFragment : Fragment(){
