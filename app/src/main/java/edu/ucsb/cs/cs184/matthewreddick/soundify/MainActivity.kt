@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         Log.i("songLibrary1", songLibrary.toString())
         getSongs()
         Log.i("songLibrary2", songLibrary.toString())
-        getIntent().putExtra("playerObject", playerObject)
+        //getIntent().putExtra("playerObject", playerObject)
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each

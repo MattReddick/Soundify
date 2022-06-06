@@ -28,7 +28,7 @@ class HomeFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    lateinit var playerObject: Player
+    //lateinit var playerObject: Player
     private lateinit var accessToken : String
     //private lateinit var playerObject : Player
 

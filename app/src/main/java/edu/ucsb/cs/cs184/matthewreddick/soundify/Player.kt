@@ -331,7 +331,7 @@ class Player : Serializable {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        Log.v(TAG,"Music is streaming")
+        //Log.v(TAG,"Music is streaming")
         started = true
     }
 
