@@ -32,12 +32,14 @@ object songLib {
     lateinit var songLib: MutableList<Song>
 }
 
+lateinit var playerObject: Player
+var started = false
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var songLibrary: MutableList<Song>
     private var spotLibrary = mutableListOf<List<String>>()
-    private lateinit var playerObject: Player
 
     private lateinit var firebase: FirebaseDatabase
     private lateinit var databaseRef: DatabaseReference
@@ -59,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         playerObject = Player(applicationContext, lifecycleScope)
+        Log.i("main player address", playerObject.toString())
         Log.i("MainActivity","SpotifyPlayer Made")
         val navView: BottomNavigationView = binding.navView
         // Lines below initialize real-time database and firebase storage
@@ -73,7 +76,6 @@ class MainActivity : AppCompatActivity() {
         Log.i("songLibrary1", songLibrary.toString())
         getSongs()
         Log.i("songLibrary2", songLibrary.toString())
-
         getIntent().putExtra("playerObject", playerObject)
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)

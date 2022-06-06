@@ -13,8 +13,6 @@ import android.widget.*
 import android.widget.TextView.OnEditorActionListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import edu.ucsb.cs.cs184.matthewreddick.soundify.*
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentHomeBinding
 import kotlinx.android.synthetic.main.activity_main.*
@@ -144,13 +142,13 @@ class HomeFragment : Fragment() {
             4, false)
         soundcloudSongs = mutableListOf(soundCloudSong1, soundCloudSong2, soundCloudSong3)
 
-        if(getActivity() != null){
-            val i : Intent? = getActivity()?.getIntent()
-            if (i != null) {
-                playerObject = i.getSerializableExtra("playerObject") as Player
-            }
-            //Log.i("HomeFragment","accessToken")
-        }
+//        if(getActivity() != null){
+//            val i : Intent? = getActivity()?.getIntent()
+//            if (i != null) {
+//                playerObject = i.getSerializableExtra("playerObject") as Player
+//            }
+//            //Log.i("HomeFragment","accessToken")
+//        }
 
         val spotifyListView = binding.spotifyList
         val soundcloudListView = binding.soundcloudList
