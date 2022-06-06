@@ -28,7 +28,7 @@ import kotlin.coroutines.suspendCoroutine
 class Player : Serializable {
 
     private var currentSong: Song? = null
-    private var currentSongIndex: Int = -1
+    var currentSongIndex: Int = -1
     var queue: ArrayList<Song>? = null
     private var mediaPlayer: MediaPlayer? = null
     private var length:Int = 0
@@ -310,6 +310,66 @@ class Player : Serializable {
                 if (currentSong != null) {
                     playSoundCloud(currentSong!!.getUri())
                     updateTrackCoverArtSoundCloud()
+                }
+                else {
+                    Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        length = 0
+    }
+
+    fun playNextFromQueue() {
+        currentSongIndex += 1
+        if(currentSongIndex == queue?.size) {
+            currentSongIndex -= 1
+            Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
+            assertAppRemoteConnected().let {
+                it.playerApi
+                    .playerState
+                    .setResultCallback { playerState ->
+                        if(playerState.isPaused == false) {
+                            it.playerApi
+                                .pause()
+                                .setResultCallback { logMessage("tmp") }
+                                .setErrorCallback(errorCallback)
+                        }
+                    }
+            }
+            if (mediaPlayer!!.isPlaying){
+                mediaPlayer!!.stop()
+            }
+            return
+        }
+        currentSong = queue?.get(currentSongIndex)
+        if (currentSong != null) {
+            assertAppRemoteConnected().let {
+                it.playerApi
+                    .playerState
+                    .setResultCallback { playerState ->
+                        if(playerState.isPaused == false) {
+                            it.playerApi
+                                .pause()
+                                .setResultCallback { logMessage("tmp") }
+                                .setErrorCallback(errorCallback)
+                        }
+                    }
+            }
+            if (mediaPlayer!!.isPlaying){
+                mediaPlayer!!.stop()
+            }
+            if (currentSong!!.isSpotify()) {
+                if (currentSong != null) {
+                    playSpotify(currentSong!!.getUri())
+                }
+                else {
+                    Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
+                }
+            }
+            else {
+                if (currentSong != null) {
+                    playSoundCloud(currentSong!!.getUri())
+                    //updateTrackCoverArtSoundCloud()
                 }
                 else {
                     Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
