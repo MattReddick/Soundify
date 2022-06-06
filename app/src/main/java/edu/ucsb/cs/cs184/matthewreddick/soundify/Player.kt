@@ -319,6 +319,11 @@ class Player : Serializable {
         length = 0
     }
 
+    fun playSame() {
+        currentSongIndex -= 1
+        playNext()
+    }
+
     fun playNextFromQueue() {
         currentSongIndex += 1
         if(currentSongIndex == queue?.size) {

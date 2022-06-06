@@ -28,6 +28,15 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
+//todo after merge:
+//1) make sure to implement progress bar and update the remaining and currentime
+//for spotify songs
+//2) make sure to implement the loop button to restart a song when skip previous
+//and skip next are clicked
+//3) make sure to play the correct song from album when queueing up a spotify song
+//4) changed the image view to pause when a song is paused or send a toast
+//5) add toasts to let the user know when a song is queued up
+
 object songLib {
     lateinit var songLib: MutableList<Song>
 }

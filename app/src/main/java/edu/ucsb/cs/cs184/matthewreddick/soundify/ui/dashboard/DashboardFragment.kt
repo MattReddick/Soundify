@@ -1,22 +1,20 @@
 package edu.ucsb.cs.cs184.matthewreddick.soundify.ui.dashboard
 
-import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.ColorFilter
+import android.R.attr.button
+import android.graphics.PorterDuff
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.squareup.picasso.Picasso
 import edu.ucsb.cs.cs184.matthewreddick.soundify.*
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentDashboardBinding
 
+var count = 0
 
 class DashboardFragment : Fragment(){
 
@@ -75,6 +73,24 @@ class DashboardFragment : Fragment(){
         //Log.i("urlupdate", root.findViewById<ImageView>(R.id.albumCoverImage).toString())
         //Picasso.get().load(url).into(root.findViewById<ImageView>(R.id.albumCoverImage))
 
+        //here changing the imageButton color so the user knows
+        //when a song is on repeat or when he can skip to the next/previous songs
+        val loopBtn : ImageButton = root.findViewById(R.id.loopButton) as ImageButton
+        loopBtn.setOnClickListener() {
+            count++
+            if (count % 2 == 1) {
+                loopBtn.background.setColorFilter(resources.getColor(R.color.green), PorterDuff.Mode.MULTIPLY)
+            } else {
+                loopBtn.background.setColorFilter(resources.getColor(R.color.purple_200), PorterDuff.Mode.MULTIPLY)
+            }
+        }
+
+        if (count % 2 == 1) {
+            loopBtn.background.setColorFilter(resources.getColor(R.color.green), PorterDuff.Mode.MULTIPLY)
+        } else {
+            loopBtn.background.setColorFilter(resources.getColor(R.color.purple_200), PorterDuff.Mode.MULTIPLY)
+        }
+
         val playBtn : ImageButton = root.findViewById(R.id.playButton) as ImageButton
         playBtn.setOnClickListener() {
             if(playerObject != null) {
@@ -94,6 +110,7 @@ class DashboardFragment : Fragment(){
         val skipForwardBtn : ImageButton = root.findViewById(R.id.skipForwardButton) as ImageButton
         skipForwardBtn.setOnClickListener() {
             if(playerObject != null) {
+                //if (count % 2 == 1) playerObject.currentSongIndex -= 1
                 playerObject.playNext()
                 val tmpSong : Song? = playerObject.getCurrentSong()
                 if(tmpSong != null) {
@@ -113,6 +130,7 @@ class DashboardFragment : Fragment(){
         val skipPreviousBtn : ImageButton = root.findViewById(R.id.skipBackButton) as ImageButton
         skipPreviousBtn.setOnClickListener() {
             if(playerObject != null) {
+                //if (count % 2 == 1) playerObject.currentSongIndex += 1
                 playerObject.playPrevious()
                 val tmpSong : Song? = playerObject.getCurrentSong()
                 if(tmpSong != null) {
@@ -123,9 +141,8 @@ class DashboardFragment : Fragment(){
             }
         }
 
-        //progressBar.progressTintList= ColorStateList.valueOf(Color.GREEN)
-        //can also do this to probably inverse the color of shuffle and loop
-        //so a user knows when they are active
+        //this part below is for the progress bar, however,
+        //it only works for soundcloud songs for now
         progress = binding.progressBar.progress
         progressBar = binding.progressBar
         curTime = binding.currTimeStampText
