@@ -5,14 +5,12 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.ColorFilter
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
@@ -27,6 +25,11 @@ class DashboardFragment : Fragment(){
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private val handler = Handler()
+    private var progress: Int = 0
+    private lateinit var progressBar: ProgressBar
+    private lateinit var curTime: TextView
+    private lateinit var remTime: TextView
     //DELETE BELOW LATER ON JUST FOR TEST
     private lateinit var accessToken : String
     override fun onCreateView(
@@ -106,10 +109,7 @@ class DashboardFragment : Fragment(){
             if(playerObject != null)
                 playerObject.shuffleQueue()
         }
-        //val progressBar = binding.progressBar
-        //progressBar.progressTintList= ColorStateList.valueOf(Color.GREEN)
-        //can also do this to probably inverse the color of shuffle and loop
-        //so a user knows when they are active
+
         val skipPreviousBtn : ImageButton = root.findViewById(R.id.skipBackButton) as ImageButton
         skipPreviousBtn.setOnClickListener() {
             if(playerObject != null) {
@@ -123,6 +123,50 @@ class DashboardFragment : Fragment(){
             }
         }
 
+        //progressBar.progressTintList= ColorStateList.valueOf(Color.GREEN)
+        //can also do this to probably inverse the color of shuffle and loop
+        //so a user knows when they are active
+        progress = binding.progressBar.progress
+        progressBar = binding.progressBar
+        curTime = binding.currTimeStampText
+        remTime = binding.remainingTimeStampText
+
+        curTime.text = "0:00"
+        remTime.text = "-0:00"
+
+        Thread(Runnable {
+            while (progress < 100) {
+                if (playerObject.mediaPlayer != null && playerObject.getCurrentSong() != null) {
+                    progress = (playerObject.mediaPlayer!!.currentPosition) /
+                               (playerObject.getCurrentSong()!!.getDuration()!!*10)
+
+                    val mediaPositionSeconds = (playerObject.mediaPlayer!!.currentPosition/1000).toInt()
+                    val durationSeconds = playerObject.getCurrentSong()!!.getDuration()!! - mediaPositionSeconds
+
+                    val curTimeMinutes = (mediaPositionSeconds/60).toInt() % 60
+                    val curTimeSeconds = (mediaPositionSeconds % 60).toInt()
+
+                    val remTimeMinutes = (durationSeconds/60).toInt() % 60
+                    val remTimeSeconds = (durationSeconds % 60).toInt()
+
+                    if (curTimeSeconds < 10) curTime.text = curTimeMinutes.toString() + ":0" + curTimeSeconds.toString()
+                    else curTime.text = curTimeMinutes.toString() + ":0" + curTimeSeconds.toString()
+                    if (remTimeSeconds < 10) remTime.text = "-" + remTimeMinutes.toString() + ":0" + remTimeSeconds.toString()
+                    else remTime.text = "-" + remTimeMinutes.toString() + ":" + remTimeSeconds.toString()
+                } else progress = 0
+
+                // Update the progress bar and display the current value
+                handler.post(Runnable {
+                    progressBar.progress = progress
+                })
+                try {
+                    Thread.sleep(100)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+            }
+
+        }).start()
         return root
     }
 

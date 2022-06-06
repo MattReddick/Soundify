@@ -30,7 +30,7 @@ class Player : Serializable {
     private var currentSong: Song? = null
     var currentSongIndex: Int = -1
     var queue: ArrayList<Song>? = null
-    private var mediaPlayer: MediaPlayer? = null
+    var mediaPlayer: MediaPlayer? = null
     private var length:Int = 0
     private var imageView : ImageView? = null
 
