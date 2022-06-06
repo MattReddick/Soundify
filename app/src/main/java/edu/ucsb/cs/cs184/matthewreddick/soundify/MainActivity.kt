@@ -33,6 +33,7 @@ object songLib {
 }
 
 lateinit var playerObject: Player
+var started = false
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         playerObject = Player(applicationContext, lifecycleScope)
+        Log.i("main player address", playerObject.toString())
         Log.i("MainActivity","SpotifyPlayer Made")
         val navView: BottomNavigationView = binding.navView
         // Lines below initialize real-time database and firebase storage
@@ -74,8 +76,7 @@ class MainActivity : AppCompatActivity() {
         Log.i("songLibrary1", songLibrary.toString())
         getSongs()
         Log.i("songLibrary2", songLibrary.toString())
-
-        //getIntent().putExtra("playerObject", playerObject)
+        getIntent().putExtra("playerObject", playerObject)
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each

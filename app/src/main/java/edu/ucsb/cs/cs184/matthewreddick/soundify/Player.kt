@@ -29,7 +29,7 @@ class Player : Serializable {
 
     private var currentSong: Song? = null
     private var currentSongIndex: Int = -1
-    private var queue: ArrayList<Song>? = null
+    var queue: ArrayList<Song>? = null
     private var mediaPlayer: MediaPlayer? = null
     private var length:Int = 0
     private var imageView : ImageView? = null
@@ -68,6 +68,7 @@ class Player : Serializable {
     fun playSpotify(track_uri : String) {
         playUri(track_uri)
         //trackWasStarted = true
+        started = true
     }
 
     fun shuffleQueue() {
@@ -111,7 +112,7 @@ class Player : Serializable {
                         }
                         playNext()
                     }
-                    updateTrackCoverArtSpotify(it)
+                    if (currentSong?.isSpotify() == true) updateTrackCoverArtSpotify(it)
                 }
                 Log.i("PlayerClass","Connected")
             } catch (error: Throwable) {
@@ -138,6 +139,17 @@ class Player : Serializable {
                             .setResultCallback { logMessage("tmp") }
                             .setErrorCallback(errorCallback)
                     }
+                }
+        }
+
+    }
+    fun reloadCoverArt() {
+        Log.i("PAUSING1","here")
+        assertAppRemoteConnected().let {
+            it.playerApi
+                .playerState
+                .setResultCallback { playerState ->
+                    updateTrackCoverArtSpotify(playerState)
                 }
         }
 
@@ -320,13 +332,14 @@ class Player : Serializable {
             e.printStackTrace()
         }
         Log.v(TAG,"Music is streaming")
+        started = true
     }
 
     public fun setImageView(newImageView : ImageView) {
         imageView = newImageView
     }
 
-    private fun updateTrackCoverArtSpotify(playerState: PlayerState) {
+    fun updateTrackCoverArtSpotify(playerState: PlayerState) {
         // Get image from track
         if(imageView != null) {
             assertAppRemoteConnected()
@@ -355,16 +368,14 @@ class Player : Serializable {
 
     }
 
-    private fun updateTrackCoverArtSoundCloud() {
+    fun updateTrackCoverArtSoundCloud() {
         if(currentSong?.getImageUrl()?.length == 0){
             imageView!!.setImageBitmap(null)
             imageView!!.destroyDrawingCache()
         }
         else {
-            val url ="http" + ((currentSong?.getImageUrl())?.substring(5))
-            Log.i("urlupdate", url)
-            Log.i("urlupdate", imageView.toString())
-            Picasso.get().load(url).into(imageView);
+            val url = ((currentSong?.getImageUrl()))
+            Picasso.get().load(url).into(imageView)
         }
     }
 

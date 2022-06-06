@@ -27,7 +27,6 @@ class DashboardFragment : Fragment(){
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    //private lateinit var playerObject : Player
     //DELETE BELOW LATER ON JUST FOR TEST
     private lateinit var accessToken : String
     override fun onCreateView(
@@ -41,26 +40,38 @@ class DashboardFragment : Fragment(){
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        /*
-        if(getActivity() != null){
-            val i : Intent? = getActivity()?.getIntent()
-            if (i != null) {
-                 playerObject = i.getSerializableExtra("playerObject") as Player
-            }
-            //Log.i("HomeFragment","accessToken")
-        }
+//        if(getActivity() != null){
+//            val i : Intent? = getActivity()?.getIntent()
+//            if (i != null) {
+//                 playerObject = i.getSerializableExtra("playerObject") as Player
+//            }
+//            //Log.i("HomeFragment","accessToken")
+//        }
 
-         */
-        /*
-        val url = "https://i1.sndcdn.com/artworks-000185496921-4ios1m-t500x500.jpg"
-        Log.i("urlupdate", url)
-        Log.i("urlupdate", root.findViewById<ImageView>(R.id.albumCoverImage).toString())
-        Picasso.get().load(url).into(root.findViewById<ImageView>(R.id.albumCoverImage))
         playerObject.setImageView(root.findViewById(R.id.albumCoverImage))
-        */
-
         val titleText : TextView = root.findViewById(R.id.songTitleText)
         val artistText : TextView = root.findViewById(R.id.artistText)
+
+        if (started) {
+            if (playerObject.queue!!.size > 0) {
+                if (playerObject.getCurrentSong()!!.isSpotify()) {
+                    val tmpSong : Song? = playerObject.getCurrentSong()
+                    titleText.text = tmpSong?.getTitle()
+                    artistText.text = tmpSong?.getArtist()
+                    playerObject.reloadCoverArt()
+                } else {
+                    val tmpSong : Song? = playerObject.getCurrentSong()
+                    titleText.text = tmpSong?.getTitle()
+                    artistText.text = tmpSong?.getArtist()
+                    playerObject.updateTrackCoverArtSoundCloud()
+                }
+            }
+        }
+        //val url = "https://i1.sndcdn.com/artworks-000185496921-4ios1m-t500x500.jpg"
+        //Log.i("urlupdate", url)
+        //Log.i("urlupdate", root.findViewById<ImageView>(R.id.albumCoverImage).toString())
+        //Picasso.get().load(url).into(root.findViewById<ImageView>(R.id.albumCoverImage))
+
         val playBtn : ImageButton = root.findViewById(R.id.playButton) as ImageButton
         playBtn.setOnClickListener() {
             if(playerObject != null) {
@@ -69,6 +80,10 @@ class DashboardFragment : Fragment(){
                 if(tmpSong != null) {
                     titleText.text = tmpSong.getTitle()
                     artistText.text = tmpSong.getArtist()
+                    //val url = "https://i1.sndcdn.com/artworks-000185496921-4ios1m-t500x500.jpg"
+                    //Picasso.get().load(url).into(root.findViewById<ImageView>(R.id.albumCoverImage))
+                    //playerObject.updateTrackCoverArtSoundCloud(root.findViewById(R.id.albumCoverImage))
+                    //Log.i("main player address", playerObject.toString())
                 }
             }
         }
@@ -81,6 +96,7 @@ class DashboardFragment : Fragment(){
                 if(tmpSong != null) {
                     titleText.text = tmpSong.getTitle()
                     artistText.text = tmpSong.getArtist()
+                    //playerObject.updateTrackCoverArtSoundCloud(root.findViewById<ImageView>(R.id.albumCoverImage))
                 }
             }
         }
@@ -102,6 +118,7 @@ class DashboardFragment : Fragment(){
                 if(tmpSong != null) {
                     titleText.text = tmpSong.getTitle()
                     artistText.text = tmpSong.getArtist()
+                    //playerObject.updateTrackCoverArtSoundCloud(root.findViewById<ImageView>(R.id.albumCoverImage))
                 }
             }
         }
