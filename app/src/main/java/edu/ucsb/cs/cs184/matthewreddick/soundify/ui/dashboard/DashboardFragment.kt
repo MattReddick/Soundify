@@ -5,6 +5,7 @@ import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,15 +78,15 @@ class DashboardFragment : Fragment(){
         //when a song is on repeat or when he can skip to the next/previous songs
         val loopBtn : ImageButton = root.findViewById(R.id.loopButton) as ImageButton
         loopBtn.setOnClickListener() {
-            count++
-            if (count % 2 == 1) {
+            playerObject.setLoop()
+            if (playerObject.getLoop()) {
                 loopBtn.background.setColorFilter(resources.getColor(R.color.green), PorterDuff.Mode.MULTIPLY)
             } else {
                 loopBtn.background.setColorFilter(resources.getColor(R.color.purple_200), PorterDuff.Mode.MULTIPLY)
             }
         }
 
-        if (count % 2 == 1) {
+        if (playerObject.getLoop()) {
             loopBtn.background.setColorFilter(resources.getColor(R.color.green), PorterDuff.Mode.MULTIPLY)
         } else {
             loopBtn.background.setColorFilter(resources.getColor(R.color.purple_200), PorterDuff.Mode.MULTIPLY)
@@ -153,23 +154,55 @@ class DashboardFragment : Fragment(){
 
         Thread(Runnable {
             while (progress < 100) {
-                if (playerObject.mediaPlayer != null && playerObject.getCurrentSong() != null) {
-                    progress = (playerObject.mediaPlayer!!.currentPosition) /
-                               (playerObject.getCurrentSong()!!.getDuration()!!*10)
+                if (playerObject.getCurrentSong() != null) {
+                    if (!playerObject.getCurrentSong()!!.isSpotify() && playerObject.mediaPlayer != null) {
+                        progress = (playerObject.mediaPlayer!!.currentPosition) /
+                                (playerObject.getCurrentSong()!!.getDuration()!! * 10)
 
-                    val mediaPositionSeconds = (playerObject.mediaPlayer!!.currentPosition/1000).toInt()
-                    val durationSeconds = playerObject.getCurrentSong()!!.getDuration()!! - mediaPositionSeconds
+                        val mediaPositionSeconds =
+                            (playerObject.mediaPlayer!!.currentPosition / 1000).toInt()
+                        val durationSeconds =
+                            playerObject.getCurrentSong()!!.getDuration()!! - mediaPositionSeconds
 
-                    val curTimeMinutes = (mediaPositionSeconds/60).toInt() % 60
-                    val curTimeSeconds = (mediaPositionSeconds % 60).toInt()
+                        val curTimeMinutes = (mediaPositionSeconds / 60).toInt() % 60
+                        val curTimeSeconds = (mediaPositionSeconds % 60).toInt()
 
-                    val remTimeMinutes = (durationSeconds/60).toInt() % 60
-                    val remTimeSeconds = (durationSeconds % 60).toInt()
+                        val remTimeMinutes = (durationSeconds / 60).toInt() % 60
+                        val remTimeSeconds = (durationSeconds % 60).toInt()
 
-                    if (curTimeSeconds < 10) curTime.text = curTimeMinutes.toString() + ":0" + curTimeSeconds.toString()
-                    else curTime.text = curTimeMinutes.toString() + ":0" + curTimeSeconds.toString()
-                    if (remTimeSeconds < 10) remTime.text = "-" + remTimeMinutes.toString() + ":0" + remTimeSeconds.toString()
-                    else remTime.text = "-" + remTimeMinutes.toString() + ":" + remTimeSeconds.toString()
+                        if (curTimeSeconds < 10) curTime.text =
+                            curTimeMinutes.toString() + ":0" + curTimeSeconds.toString()
+                        else curTime.text =
+                            curTimeMinutes.toString() + ":0" + curTimeSeconds.toString()
+                        if (remTimeSeconds < 10) remTime.text =
+                            "-" + remTimeMinutes.toString() + ":0" + remTimeSeconds.toString()
+                        else remTime.text =
+                            "-" + remTimeMinutes.toString() + ":" + remTimeSeconds.toString()
+                    } else {
+                        progress = (playerObject.getCurrentPosition().toInt()) /
+                                (playerObject.getCurrentSong()!!.getDuration()!! * 10)
+
+                        Log.i("spotify", playerObject.getCurrentPosition().toString())
+                        val mediaPositionSeconds =
+                            (playerObject.getCurrentPosition() / 1000).toInt()
+                        val durationSeconds =
+                            playerObject.getCurrentSong()!!.getDuration()!! - mediaPositionSeconds
+
+                        val curTimeMinutes = (mediaPositionSeconds / 60).toInt() % 60
+                        val curTimeSeconds = (mediaPositionSeconds % 60).toInt()
+
+                        val remTimeMinutes = (durationSeconds / 60).toInt() % 60
+                        val remTimeSeconds = (durationSeconds % 60).toInt()
+
+                        if (curTimeSeconds < 10) curTime.text =
+                            curTimeMinutes.toString() + ":0" + curTimeSeconds.toString()
+                        else curTime.text =
+                            curTimeMinutes.toString() + ":0" + curTimeSeconds.toString()
+                        if (remTimeSeconds < 10) remTime.text =
+                            "-" + remTimeMinutes.toString() + ":0" + remTimeSeconds.toString()
+                        else remTime.text =
+                            "-" + remTimeMinutes.toString() + ":" + remTimeSeconds.toString()
+                    }
                 } else progress = 0
 
                 // Update the progress bar and display the current value

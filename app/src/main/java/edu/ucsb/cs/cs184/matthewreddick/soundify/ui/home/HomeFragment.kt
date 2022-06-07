@@ -86,14 +86,14 @@ class HomeFragment : Fragment() {
             "Kanye West",
             "Graduation",
             "https://i.scdn.co/image/ab67616d0000b27326f7f19c7f0381e56156c94a",
-            "spotify:album:4SZko61aMnmgvNhfhgTuD3",
+            "spotify:track:4iz9lGMjU1lXS51oPmUmTe",
             203,
             2, true)
         val spotifySong3 = Song("Heartless",
             "Kanye West",
             "808's and Heartbreak",
             "https://i.scdn.co/image/ab67616d0000b273346d77e155d854735410ed18",
-            "spotify:album:3WFTGIO6E3Xh4paEOBY9OU",
+            "spotify:track:4EWCNWgDS8707fNSZ1oaA5",
             211,
             3, true)
         spotifySongs = mutableListOf(spotifySong1, spotifySong2, spotifySong3)

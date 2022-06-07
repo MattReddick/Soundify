@@ -27,6 +27,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class Player : Serializable {
 
+    private var loop = false
     private var currentSong: Song? = null
     var currentSongIndex: Int = -1
     var queue: ArrayList<Song>? = null
@@ -44,7 +45,13 @@ class Player : Serializable {
 
     private var trackWasStartedSpotify = false
 
+    fun getLoop(): Boolean {
+        return loop
+    }
 
+    fun setLoop() {
+        loop = !loop
+    }
 
     private val errorCallback = { throwable: Throwable -> logError(throwable) }
     constructor(context: Context, lifecycleScope : LifecycleCoroutineScope) {
@@ -143,6 +150,21 @@ class Player : Serializable {
         }
 
     }
+
+    fun getCurrentPosition(): Int {
+        var result = 0
+        assertAppRemoteConnected().let {
+            it.playerApi
+                .playerState
+                .setResultCallback { playerState ->
+                    Log.i("spotify", playerState.playbackPosition.toString())
+                    result = playerState.playbackPosition.toInt()
+                }
+        }
+        Thread.sleep(100)
+        return result
+    }
+
     fun reloadCoverArt() {
         Log.i("PAUSING1","here")
         assertAppRemoteConnected().let {
@@ -260,7 +282,7 @@ class Player : Serializable {
     }
 
     fun playNext() {
-        currentSongIndex += 1
+        if (currentSongIndex == -1 || !loop) currentSongIndex += 1
         if(currentSongIndex == queue?.size) {
             currentSongIndex -= 1
             Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
@@ -427,7 +449,8 @@ class Player : Serializable {
             }
         }
         else {
-            currentSongIndex += -2
+            if (!loop) currentSongIndex += -2
+            else currentSongIndex += -1
             playNext()
         }
 
