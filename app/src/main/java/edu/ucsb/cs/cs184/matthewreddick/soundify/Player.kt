@@ -137,13 +137,13 @@ class Player : Serializable {
                     if (playerState.isPaused) {
                         it.playerApi
                             .resume()
-                            .setResultCallback { logMessage("tmp") }
+                            //.setResultCallback { logMessage("tmp") }
                             .setErrorCallback(errorCallback)
                     } else {
                         Log.i("PAUSING","here")
                         it.playerApi
                             .pause()
-                            .setResultCallback { logMessage("tmp") }
+                            //.setResultCallback { logMessage("tmp") }
                             .setErrorCallback(errorCallback)
                     }
                 }
@@ -292,7 +292,7 @@ class Player : Serializable {
                         if(playerState.isPaused == false) {
                             it.playerApi
                                 .pause()
-                                .setResultCallback { logMessage("tmp") }
+                                //.setResultCallback { logMessage("tmp") }
                                 .setErrorCallback(errorCallback)
                         }
                     }
@@ -311,7 +311,7 @@ class Player : Serializable {
                         if(playerState.isPaused == false) {
                             it.playerApi
                                 .pause()
-                                .setResultCallback { logMessage("tmp") }
+                                //.setResultCallback { logMessage("tmp") }
                                 .setErrorCallback(errorCallback)
                         }
                     }
@@ -353,7 +353,7 @@ class Player : Serializable {
                         if(playerState.isPaused == false) {
                             it.playerApi
                                 .pause()
-                                .setResultCallback { logMessage("tmp") }
+                                //.setResultCallback { logMessage("tmp") }
                                 .setErrorCallback(errorCallback)
                         }
                     }
@@ -372,7 +372,7 @@ class Player : Serializable {
                         if(playerState.isPaused == false) {
                             it.playerApi
                                 .pause()
-                                .setResultCallback { logMessage("tmp") }
+                                //.setResultCallback { logMessage("tmp") }
                                 .setErrorCallback(errorCallback)
                         }
                     }
