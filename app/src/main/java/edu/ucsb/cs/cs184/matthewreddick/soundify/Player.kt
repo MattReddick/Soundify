@@ -112,7 +112,7 @@ class Player : Serializable {
                                 .setResultCallback { playerState ->
                                     it.playerApi
                                         .pause()
-                                        .setResultCallback { logMessage("tmp") }
+                                        //.setResultCallback { logMessage("tmp") }
                                         .setErrorCallback(errorCallback)
 
                                 }
@@ -157,7 +157,6 @@ class Player : Serializable {
             it.playerApi
                 .playerState
                 .setResultCallback { playerState ->
-                    Log.i("spotify", playerState.playbackPosition.toString())
                     result = playerState.playbackPosition.toInt()
                 }
         }
@@ -283,7 +282,7 @@ class Player : Serializable {
 
     fun playNext() {
         if (currentSongIndex == -1 || !loop) currentSongIndex += 1
-        if(currentSongIndex == queue?.size) {
+        if(currentSongIndex >= queue?.size!!) {
             currentSongIndex -= 1
             Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
             assertAppRemoteConnected().let {
@@ -319,6 +318,7 @@ class Player : Serializable {
             }
             if (mediaPlayer!!.isPlaying){
                 mediaPlayer!!.stop()
+                Thread.sleep(100)
             }
             if (currentSong!!.isSpotify()) {
                 if (currentSong != null) {
@@ -341,14 +341,9 @@ class Player : Serializable {
         length = 0
     }
 
-    fun playSame() {
-        currentSongIndex -= 1
-        playNext()
-    }
-
     fun playNextFromQueue() {
         currentSongIndex += 1
-        if(currentSongIndex == queue?.size) {
+        if(currentSongIndex >= queue?.size!!) {
             currentSongIndex -= 1
             Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
             assertAppRemoteConnected().let {
@@ -384,6 +379,7 @@ class Player : Serializable {
             }
             if (mediaPlayer!!.isPlaying){
                 mediaPlayer!!.stop()
+                Thread.sleep(100)
             }
             if (currentSong!!.isSpotify()) {
                 if (currentSong != null) {
@@ -450,7 +446,6 @@ class Player : Serializable {
         }
         else {
             if (!loop) currentSongIndex += -2
-            else currentSongIndex += -1
             playNext()
         }
 

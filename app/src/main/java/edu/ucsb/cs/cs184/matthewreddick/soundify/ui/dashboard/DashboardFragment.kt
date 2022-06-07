@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import edu.ucsb.cs.cs184.matthewreddick.soundify.*
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentDashboardBinding
 
-var count = 0
+var playPause = false
 
 class DashboardFragment : Fragment(){
 
@@ -78,12 +78,18 @@ class DashboardFragment : Fragment(){
         //when a song is on repeat or when he can skip to the next/previous songs
         val loopBtn : ImageButton = root.findViewById(R.id.loopButton) as ImageButton
         loopBtn.setOnClickListener() {
-            playerObject.setLoop()
-            if (playerObject.getLoop()) {
-                loopBtn.background.setColorFilter(resources.getColor(R.color.green), PorterDuff.Mode.MULTIPLY)
-            } else {
-                loopBtn.background.setColorFilter(resources.getColor(R.color.purple_200), PorterDuff.Mode.MULTIPLY)
-            }
+                playerObject.setLoop()
+                if (playerObject.getLoop()) {
+                    loopBtn.background.setColorFilter(
+                        resources.getColor(R.color.green),
+                        PorterDuff.Mode.MULTIPLY
+                    )
+                } else {
+                    loopBtn.background.setColorFilter(
+                        resources.getColor(R.color.purple_200),
+                        PorterDuff.Mode.MULTIPLY
+                    )
+                }
         }
 
         if (playerObject.getLoop()) {
@@ -104,8 +110,22 @@ class DashboardFragment : Fragment(){
                     //Picasso.get().load(url).into(root.findViewById<ImageView>(R.id.albumCoverImage))
                     //playerObject.updateTrackCoverArtSoundCloud(root.findViewById(R.id.albumCoverImage))
                     //Log.i("main player address", playerObject.toString())
+                } else {
+                    Toast.makeText(context, "No songs on queue!", Toast.LENGTH_SHORT).show()
+                }
+                playPause = !playPause
+                if (playPause) {
+                    playBtn.setImageResource(R.drawable.ic_baseline_pause_24)
+                } else {
+                    playBtn.setImageResource(R.drawable.ic_baseline_play_arrow_24)
                 }
             }
+        }
+
+        if (playPause) {
+            playBtn.setImageResource(R.drawable.ic_baseline_pause_24)
+        } else {
+            playBtn.setImageResource(R.drawable.ic_baseline_play_arrow_24)
         }
 
         val skipForwardBtn : ImageButton = root.findViewById(R.id.skipForwardButton) as ImageButton
@@ -119,6 +139,8 @@ class DashboardFragment : Fragment(){
                     artistText.text = tmpSong.getArtist()
                     //playerObject.updateTrackCoverArtSoundCloud(root.findViewById<ImageView>(R.id.albumCoverImage))
                 }
+                playPause = true
+                playBtn.setImageResource(R.drawable.ic_baseline_pause_24)
             }
         }
 
@@ -139,6 +161,8 @@ class DashboardFragment : Fragment(){
                     artistText.text = tmpSong.getArtist()
                     //playerObject.updateTrackCoverArtSoundCloud(root.findViewById<ImageView>(R.id.albumCoverImage))
                 }
+                playPause = true
+                playBtn.setImageResource(R.drawable.ic_baseline_pause_24)
             }
         }
 
@@ -173,7 +197,7 @@ class DashboardFragment : Fragment(){
                         if (curTimeSeconds < 10) curTime.text =
                             curTimeMinutes.toString() + ":0" + curTimeSeconds.toString()
                         else curTime.text =
-                            curTimeMinutes.toString() + ":0" + curTimeSeconds.toString()
+                            curTimeMinutes.toString() + ":" + curTimeSeconds.toString()
                         if (remTimeSeconds < 10) remTime.text =
                             "-" + remTimeMinutes.toString() + ":0" + remTimeSeconds.toString()
                         else remTime.text =
@@ -182,7 +206,6 @@ class DashboardFragment : Fragment(){
                         progress = (playerObject.getCurrentPosition().toInt()) /
                                 (playerObject.getCurrentSong()!!.getDuration()!! * 10)
 
-                        Log.i("spotify", playerObject.getCurrentPosition().toString())
                         val mediaPositionSeconds =
                             (playerObject.getCurrentPosition() / 1000).toInt()
                         val durationSeconds =
@@ -197,7 +220,7 @@ class DashboardFragment : Fragment(){
                         if (curTimeSeconds < 10) curTime.text =
                             curTimeMinutes.toString() + ":0" + curTimeSeconds.toString()
                         else curTime.text =
-                            curTimeMinutes.toString() + ":0" + curTimeSeconds.toString()
+                            curTimeMinutes.toString() + ":" + curTimeSeconds.toString()
                         if (remTimeSeconds < 10) remTime.text =
                             "-" + remTimeMinutes.toString() + ":0" + remTimeSeconds.toString()
                         else remTime.text =

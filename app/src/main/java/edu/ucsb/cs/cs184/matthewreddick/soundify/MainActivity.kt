@@ -29,13 +29,7 @@ import org.json.JSONObject
 import java.io.IOException
 
 //todo after merge:
-//2) make sure to implement the loop button to restart a song when skip previous
-//and skip next are clicked
 //4) changed the image view to pause when a song is paused or send a toast
-//5) add toasts to let the user know when a song is queued up
-//6) portrait lock
-
-//add to readme -> spotify android demo
 
 object songLib {
     lateinit var songLib: MutableList<Song>

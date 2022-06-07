@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 private lateinit var spotifySongs : MutableList<Song>
 private lateinit var soundcloudSongs : MutableList<Song>
+private var con : Context ?= null
 
 class HomeFragment : Fragment() {
 
@@ -43,38 +44,12 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        con = context
+
         val searchBar : EditText = root.findViewById(R.id.search_bar) as EditText
         //create 3 songs from soundcloud and spotify and put them in a list
         //then connect them to the home UI for display
 
-        //Search Result:
-        // [[spotify:track:06JvOZ39sK8D8SqiqfaxDU, True Love, Kanye West],
-        // [spotify:track:4iz9lGMjU1lXS51oPmUmTe, Homecoming, Kanye West],
-        // [spotify:track:4EWCNWgDS8707fNSZ1oaA5, Heartless, Kanye West]]
-        //song 1
-        // title: True Love
-        // artist: Kanye West
-        // Album: Single
-        // imageURL: "https:\/\/i.scdn.co\/image\/ab67616d0000b273f52f6a4706fea3bde44467c3"
-        // audioURL: "spotify:album:1YA0gAfV91LkDq1DODSCbc"
-        // duration: 148571ms
-        // id = 1
-        //song 2
-        // title: Homecoming
-        // artist: Kanye West
-        // Album: Graduation
-        // imageURL: "https:\/\/i.scdn.co\/image\/ab67616d0000b27326f7f19c7f0381e56156c94a"
-        // audioURL: "spotify:album:4SZko61aMnmgvNhfhgTuD3"
-        // duration: 203493ms
-        // id = 2
-        //song 3
-        // title: Heartless
-        // artist: Kanye West
-        // Album: 808's and Heartbreak
-        // imageURL: "https:\/\/i.scdn.co\/image\/ab67616d0000b273346d77e155d854735410ed18"
-        // audioURL: "spotify:album:3WFTGIO6E3Xh4paEOBY9OU"
-        // duration: 211586ms
-        // id = 3
         val spotifySong1 = Song("True Love",
             "Kanye West",
             "Single",
@@ -97,27 +72,6 @@ class HomeFragment : Fragment() {
             211,
             3, true)
         spotifySongs = mutableListOf(spotifySong1, spotifySong2, spotifySong3)
-
-        //Artist: Mike Snow
-        //    Album:
-        //    ImageUrl: https://i1.sndcdn.com/artworks-000001914954-vh5avg-t500x500.jpg
-        //    AudioUrl: https://firebasestorage.googleapis.com/v0/b/cs184-soundify.appspot.com/o/Songs%2FAnimal.mp3?alt=media&token=448477d5-778f-4b44-8c2b-47aa626081ed
-        //    Duration: 263
-        //    ID: 10
-        //    , Title: Closer
-        //    Artist: Chainsmokers
-        //    Album:
-        //    ImageUrl: https://i1.sndcdn.com/artworks-000185496921-4ios1m-t500x500.jpg
-        //    AudioUrl: https://firebasestorage.googleapis.com/v0/b/cs184-soundify.appspot.com/o/Songs%2FCloser.mp3?alt=media&token=9ffae7c6-c766-4487-acaf-8087445ea187
-        //    Duration: 160
-        //    ID: 6
-        //    , Title: Law of Attraction
-        //    Artist: Kanye West
-        //    Album:
-        //    ImageUrl: https://i1.sndcdn.com/artworks-FGiyFZ0Q2crsCIZB-ahkovQ-t500x500.jpg
-        //    AudioUrl: https://firebasestorage.googleapis.com/v0/b/cs184-soundify.appspot.com/o/Songs%2FLawOfAttraction.mp3?alt=media&token=1a7f8dc2-660f-444c-afe0-aa184f0482af
-        //    Duration: 207
-        //    ID: 4
 
         val soundCloudSong1 = Song("Animal",
             "Miike Snow",
@@ -254,7 +208,7 @@ class HomeFragment : Fragment() {
             val addToQueueBtn = myView.findViewById<ImageButton>(R.id.addToQueue)
             addToQueueBtn.setOnClickListener() {
                 playerObject.addToQueue(spotifySongs[p0])
-                Log.i("song clicked!", "song clicked!")
+                Toast.makeText(con, "queued " + spotifySongs[p0].getTitle(), Toast.LENGTH_SHORT).show()
             }
             return myView
         }
@@ -296,6 +250,7 @@ class HomeFragment : Fragment() {
             val addToQueueBtn = myView.findViewById<ImageButton>(R.id.addToQueue)
             addToQueueBtn.setOnClickListener() {
                 playerObject.addToQueue(soundcloudSongs[p0])
+                Toast.makeText(con, "queued " + soundcloudSongs[p0].getTitle(), Toast.LENGTH_SHORT).show()
             }
             return myView
         }
