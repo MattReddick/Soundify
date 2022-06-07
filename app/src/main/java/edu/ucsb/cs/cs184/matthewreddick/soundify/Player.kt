@@ -198,7 +198,7 @@ class Player : Serializable {
         assertAppRemoteConnected()
             .playerApi
             .play(uri)
-            .setResultCallback { logMessage("Temp") }
+            //.setResultCallback { logMessage("Temp") }
             .setErrorCallback(errorCallback)
     }
 
