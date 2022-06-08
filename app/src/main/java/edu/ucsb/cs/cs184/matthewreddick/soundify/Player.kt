@@ -23,7 +23,6 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class Player : Serializable {
-
     var inQueueFragment = false
     private var loop = false
     private var currentSong: Song? = null

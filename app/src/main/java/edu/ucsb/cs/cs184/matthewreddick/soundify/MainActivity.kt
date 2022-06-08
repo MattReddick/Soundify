@@ -35,7 +35,6 @@ lateinit var playerObject: Player
 var started = false
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
     private lateinit var songLibrary: MutableList<Song>
     private var spotLibrary = mutableListOf<List<String>>()

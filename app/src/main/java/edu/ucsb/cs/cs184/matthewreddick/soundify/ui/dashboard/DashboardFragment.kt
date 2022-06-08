@@ -14,7 +14,6 @@ import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentDashboardBi
 var playPause = false
 
 class DashboardFragment : Fragment(){
-
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
     private val handler = Handler()

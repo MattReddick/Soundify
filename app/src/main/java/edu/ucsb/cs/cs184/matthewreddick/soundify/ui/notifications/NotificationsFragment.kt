@@ -19,7 +19,6 @@ lateinit var queueList: NotificationsFragment.CustomAdapterQueue
 private var con : Context?= null
 
 class NotificationsFragment : Fragment() {
-
     private var _binding: FragmentNotificationsBinding? = null
     private val binding get() = _binding!!
 
