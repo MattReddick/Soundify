@@ -2,5 +2,5 @@
     <string name="app_name">Soundify</string>
     <string name="title_home">Queue</string>
     <string name="title_search">Home</string>
-    <string name="title_notifications">Search</string>
+    <string name="title_queue">Search</string>
 </resources>
