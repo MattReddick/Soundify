@@ -22,9 +22,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-
 class Player : Serializable {
 
+    var inQueueFragment = false
     private var loop = false
     private var currentSong: Song? = null
     var currentSongIndex: Int = -1
@@ -89,7 +89,6 @@ class Player : Serializable {
     }
 
     private fun connect(showAuthView: Boolean, context: Context, lifecycleScope : LifecycleCoroutineScope) {
-
         SpotifyAppRemote.disconnect(spotifyAppRemote)
         mainContext = context
         lifecycleScope.launch {
@@ -105,7 +104,6 @@ class Player : Serializable {
                                 .setResultCallback { _ ->
                                     it.playerApi
                                         .pause()
-                                        //.setResultCallback { logMessage("tmp") }
                                         .setErrorCallback(errorCallback)
 
                                 }
@@ -129,13 +127,11 @@ class Player : Serializable {
                     if (playerState.isPaused) {
                         it.playerApi
                             .resume()
-                            //.setResultCallback { logMessage("tmp") }
                             .setErrorCallback(errorCallback)
                     } else {
                         Log.i("PAUSING","here")
                         it.playerApi
                             .pause()
-                            //.setResultCallback { logMessage("tmp") }
                             .setErrorCallback(errorCallback)
                     }
                 }
@@ -188,23 +184,16 @@ class Player : Serializable {
         assertAppRemoteConnected()
             .playerApi
             .play(uri)
-            //.setResultCallback { logMessage("Temp") }
             .setErrorCallback(errorCallback)
     }
 
     private fun handleTrackEnded (playerState: PlayerState) : Boolean {
         setTrackWasStarted(playerState)
-
         val position = playerState.playbackPosition
-
         val isPaused = playerState.isPaused
-
         val hasEnded = trackWasStartedSpotify && isPaused && position == 0L
-
         if (hasEnded) {
-
             trackWasStartedSpotify = false
-
         }
         return hasEnded
     }
@@ -213,11 +202,8 @@ class Player : Serializable {
         val duration = playerState.track.duration
         val position = playerState.playbackPosition
         val isPlaying = !playerState.isPaused
-
         if (!trackWasStartedSpotify && position > 0 && duration > 0 && isPlaying) {
-
             trackWasStartedSpotify = true
-
         }
     }
 
@@ -262,7 +248,6 @@ class Player : Serializable {
                 mediaPlayer?.start()
             }
         }
-
     }
 
     fun playNext() {
@@ -277,7 +262,6 @@ class Player : Serializable {
                         if(!playerState.isPaused) {
                             it.playerApi
                                 .pause()
-                                //.setResultCallback { logMessage("tmp") }
                                 .setErrorCallback(errorCallback)
                         }
                     }
@@ -296,7 +280,6 @@ class Player : Serializable {
                         if(!playerState.isPaused) {
                             it.playerApi
                                 .pause()
-                                //.setResultCallback { logMessage("tmp") }
                                 .setErrorCallback(errorCallback)
                         }
                     }
@@ -316,68 +299,7 @@ class Player : Serializable {
             else {
                 if (currentSong != null) {
                     playSoundCloud(currentSong!!.getUri())
-                    updateTrackCoverArtSoundCloud()
-                }
-                else {
-                    Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-        length = 0
-    }
-
-    fun playNextFromQueue() {
-        currentSongIndex += 1
-        if(currentSongIndex >= queue?.size!!) {
-            currentSongIndex -= 1
-            Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
-            assertAppRemoteConnected().let {
-                it.playerApi
-                    .playerState
-                    .setResultCallback { playerState ->
-                        if(!playerState.isPaused) {
-                            it.playerApi
-                                .pause()
-                                //.setResultCallback { logMessage("tmp") }
-                                .setErrorCallback(errorCallback)
-                        }
-                    }
-            }
-            if (mediaPlayer!!.isPlaying){
-                mediaPlayer!!.stop()
-            }
-            return
-        }
-        currentSong = queue?.get(currentSongIndex)
-        if (currentSong != null) {
-            assertAppRemoteConnected().let {
-                it.playerApi
-                    .playerState
-                    .setResultCallback { playerState ->
-                        if(!playerState.isPaused) {
-                            it.playerApi
-                                .pause()
-                                //.setResultCallback { logMessage("tmp") }
-                                .setErrorCallback(errorCallback)
-                        }
-                    }
-            }
-            if (mediaPlayer!!.isPlaying){
-                mediaPlayer!!.stop()
-                Thread.sleep(100)
-            }
-            if (currentSong!!.isSpotify()) {
-                if (currentSong != null) {
-                    playSpotify(currentSong!!.getUri())
-                }
-                else {
-                    Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
-                }
-            }
-            else {
-                if (currentSong != null) {
-                    playSoundCloud(currentSong!!.getUri())
-                    //updateTrackCoverArtSoundCloud()
+                    if (!inQueueFragment) updateTrackCoverArtSoundCloud()
                 }
                 else {
                     Toast.makeText(mainContext, "Queue a song!", Toast.LENGTH_SHORT).show()
@@ -407,7 +329,6 @@ class Player : Serializable {
     }
 
     private fun updateTrackCoverArtSpotify(playerState: PlayerState) {
-        // Get image from track
         if(imageView != null) {
             assertAppRemoteConnected()
                 .imagesApi

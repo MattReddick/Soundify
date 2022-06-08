@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import edu.ucsb.cs.cs184.matthewreddick.soundify.*
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentDashboardBinding
 
@@ -49,8 +48,7 @@ class DashboardFragment : Fragment(){
             }
         }
 
-        //here changing the imageButton color so the user knows
-        //when a song is on repeat or when he can skip to the next/previous songs
+        //changing loop button's color so the user knows when songs are on repeat
         val loopBtn : ImageButton = root.findViewById(R.id.loopButton) as ImageButton
         loopBtn.setOnClickListener {
             playerObject.setLoop()

@@ -1,5 +1,6 @@
 package edu.ucsb.cs.cs184.matthewreddick.soundify.ui.notifications
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,12 +9,14 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import edu.ucsb.cs.cs184.matthewreddick.soundify.R
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentNotificationsBinding
 import edu.ucsb.cs.cs184.matthewreddick.soundify.playerObject
 
 lateinit var queueList: NotificationsFragment.CustomAdapterQueue
+private var con : Context?= null
 
 class NotificationsFragment : Fragment() {
 
@@ -28,6 +31,9 @@ class NotificationsFragment : Fragment() {
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        con = context
+
+        playerObject.inQueueFragment = true
         val queueListView = binding.QueueList
 
         val shuffle = binding.shuffleQueue
@@ -91,7 +97,8 @@ class NotificationsFragment : Fragment() {
                 if (playerObject.queue!!.size > 0) {
                     val tempIndex = playerObject.queue!!.indexOf(playerObject.queue!![p0])
                     playerObject.currentSongIndex = tempIndex - 1
-                    playerObject.playNextFromQueue()
+                    playerObject.playNext()
+                    Toast.makeText(con, "now playing " + playerObject.queue!![p0].getTitle(), Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -99,7 +106,8 @@ class NotificationsFragment : Fragment() {
                 if (playerObject.queue!!.size > 0) {
                     val tempIndex = playerObject.queue!!.indexOf(playerObject.queue!![p0])
                     playerObject.currentSongIndex = tempIndex - 1
-                    playerObject.playNextFromQueue()
+                    playerObject.playNext()
+                    Toast.makeText(con, "now playing " + playerObject.queue!![p0].getTitle(), Toast.LENGTH_SHORT).show()
                 }
             }
             if (playerObject.queue!![p0].isSpotify()) {
@@ -110,6 +118,7 @@ class NotificationsFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        playerObject.inQueueFragment = false
         super.onDestroyView()
         _binding = null
     }
