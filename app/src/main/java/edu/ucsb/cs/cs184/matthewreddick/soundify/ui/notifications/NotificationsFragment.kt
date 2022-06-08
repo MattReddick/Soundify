@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import edu.ucsb.cs.cs184.matthewreddick.soundify.R
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentNotificationsBinding
 import edu.ucsb.cs.cs184.matthewreddick.soundify.playerObject
+import edu.ucsb.cs.cs184.matthewreddick.soundify.ui.dashboard.playPause
 
 lateinit var queueList: NotificationsFragment.CustomAdapterQueue
 private var con : Context?= null
@@ -97,6 +98,7 @@ class NotificationsFragment : Fragment() {
                     val tempIndex = playerObject.queue!!.indexOf(playerObject.queue!![p0])
                     playerObject.currentSongIndex = tempIndex - 1
                     playerObject.playNext()
+                    playPause = true
                     Toast.makeText(con, "now playing " + playerObject.queue!![p0].getTitle(), Toast.LENGTH_SHORT).show()
                 }
             }
@@ -106,6 +108,7 @@ class NotificationsFragment : Fragment() {
                     val tempIndex = playerObject.queue!!.indexOf(playerObject.queue!![p0])
                     playerObject.currentSongIndex = tempIndex - 1
                     playerObject.playNext()
+                    playPause = true
                     Toast.makeText(con, "now playing " + playerObject.queue!![p0].getTitle(), Toast.LENGTH_SHORT).show()
                 }
             }

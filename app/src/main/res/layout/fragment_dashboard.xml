@@ -138,57 +138,65 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:orientation="horizontal">
+            android:layout_weight="4"
+            android:orientation="vertical" >
 
-            <ImageButton
-                android:id="@+id/skipBackButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/purple_200"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_baseline_skip_previous_24" />
+                android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/playButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/purple_200"
+                <ImageButton
+                    android:id="@+id/skipBackButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/purple_200"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_baseline_skip_previous_24" />
+
+                <ImageButton
+                    android:id="@+id/playButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/purple_200"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_baseline_play_arrow_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/skipForwardButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/purple_200"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_baseline_skip_next_24" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_baseline_play_arrow_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/skipForwardButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/purple_200"
-                android:layout_weight="1"
-                android:src="@drawable/ic_baseline_skip_next_24" />
-        </LinearLayout>
+                <ImageButton
+                    android:id="@+id/shuffleButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/purple_200"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_baseline_shuffle_24" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5"
-            android:orientation="horizontal">
+                <ImageButton
+                    android:id="@+id/loopButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/purple_200"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_baseline_loop_24" />
+            </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/shuffleButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/purple_200"
-                android:layout_weight="1"
-                android:src="@drawable/ic_baseline_shuffle_24" />
-
-            <ImageButton
-                android:id="@+id/loopButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/purple_200"
-                android:layout_weight="1"
-                android:src="@drawable/ic_baseline_loop_24" />
         </LinearLayout>
 
     </LinearLayout>
