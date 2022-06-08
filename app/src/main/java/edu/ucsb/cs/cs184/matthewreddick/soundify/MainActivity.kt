@@ -9,7 +9,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.*
@@ -28,9 +27,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
-//todo after merge:
-//4) changed the image view to pause when a song is paused or send a toast
-
 object songLib {
     lateinit var songLib: MutableList<Song>
 }
@@ -48,9 +44,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var databaseRef: DatabaseReference
     private lateinit var fbStorage: FirebaseStorage
     private lateinit var storageRef: StorageReference
-    val CLIENT_ID = "e01fcf6eba35472bb4aa1db36bf92863"
-    val AUTH_TOKEN_REQUEST_CODE = 0x10
-    val AUTH_CODE_REQUEST_CODE = 0x11
+    private val CLIENT_ID = "e01fcf6eba35472bb4aa1db36bf92863"
+    private val AUTH_TOKEN_REQUEST_CODE = 0x10
+    private val AUTH_CODE_REQUEST_CODE = 0x11
 
     private val mOkHttpClient = OkHttpClient()
     private var mAccessToken: String? = null
@@ -67,29 +63,20 @@ class MainActivity : AppCompatActivity() {
         Log.i("main player address", playerObject.toString())
         Log.i("MainActivity","SpotifyPlayer Made")
         val navView: BottomNavigationView = binding.navView
+
         // Lines below initialize real-time database and firebase storage
         firebase = Firebase.database
         databaseRef = firebase.getReference("Songs")
         fbStorage = Firebase.storage
         storageRef = fbStorage.reference
-//        readData()
-        //spotifyPlayer.getAccessToken()
+
         onRequestTokenClicked(binding.root)
         songLibrary = mutableListOf()
         Log.i("songLibrary1", songLibrary.toString())
         getSongs()
         Log.i("songLibrary2", songLibrary.toString())
-        //getIntent().putExtra("playerObject", playerObject)
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-            )
-        )
-        //setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
     private fun getRedirectUri(): Uri? {
@@ -98,12 +85,8 @@ class MainActivity : AppCompatActivity() {
             .authority("auth")
             .build()
     }
-    fun onRequestCodeClicked(view: View?) {
-        val request = getAuthenticationRequest(AuthorizationResponse.Type.CODE)
-        AuthorizationClient.openLoginActivity(this, AUTH_CODE_REQUEST_CODE, request)
-    }
 
-    fun onRequestTokenClicked(view: View?) {
+    private fun onRequestTokenClicked(view: View?) {
         val request = getAuthenticationRequest(AuthorizationResponse.Type.TOKEN)
         AuthorizationClient.openLoginActivity(this, AUTH_TOKEN_REQUEST_CODE, request)
     }
@@ -122,19 +105,13 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val response = AuthorizationClient.getResponse(resultCode, data)
-        /*
-        if (response.error != null && !response.error.isEmpty()) {
-            setResponse(response.error)
-        }
-         */
+
         if (requestCode == AUTH_TOKEN_REQUEST_CODE) {
             mAccessToken = response.accessToken
             Log.i("TOKEN",mAccessToken.toString())
             getIntent().putExtra("tokenObject", mAccessToken)
-            //updateTokenView()
         } else if (requestCode == AUTH_CODE_REQUEST_CODE) {
             mAccessCode = response.code
-            //updateCodeView()
             Log.i("CODE",mAccessCode.toString())
         }
     }
@@ -151,7 +128,7 @@ class MainActivity : AppCompatActivity() {
             .build()
         cancelCall()
         val mCall = mOkHttpClient.newCall(request)
-        mCall!!.enqueue(object : Callback {
+        mCall.enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.i("MainSearch","Failed to fetch data")
             }
@@ -160,10 +137,8 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
                 try {
                     val jsonObject = JSONObject(response.body!!.string())
-                    Log.i("Full Search Details", jsonObject.toString(3))
                     val jsonSongs: JSONObject = jsonObject.getJSONObject("tracks")
                     val items: JSONArray = jsonSongs.getJSONArray(("items"))
-                    //I realize this should be a for loop
 
                     if(items.length() <= 0) {
                         return
@@ -171,15 +146,12 @@ class MainActivity : AppCompatActivity() {
 
                     for (i in 1..items.length()) {
                         val song : JSONObject = items[i-1] as JSONObject
-                        //Log.i("Search detail song " + Integer.toString(i), song.toString(3))
                         val songInfo = listOf(song.getString("name"),
                             (song.getJSONArray("artists")[0] as JSONObject).getString("name"),
                             song.getString("uri"),
                             (song.getString("duration_ms").toInt()/1000).toString())
                         spotLibrary.add(songInfo)
                     }
-                    //Log.i("Spotify Search Result", printABLE.printABLE.toString())
-                    //return printABLE.printABLE
                 } catch (e: JSONException) {
                     Log.i("MainSearch","Failed to parse data")
                 }
@@ -188,13 +160,12 @@ class MainActivity : AppCompatActivity() {
         return spotLibrary
     }
 
-    fun getSongs(){
+    private fun getSongs(){
         databaseRef.addValueEventListener(object: ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-//                val value = snapshot.value
                 val children = snapshot.children
                 children.forEach {
                     var title = ""
@@ -205,8 +176,6 @@ class MainActivity : AppCompatActivity() {
                     var duration = 0
                     var id = 0
 
-//                    title = it.value.toString()
-
                     val values = it.children
                     Log.i("key", it.key.toString())
                     if (it.key.toString() != "Example") {
@@ -215,7 +184,6 @@ class MainActivity : AppCompatActivity() {
                                 "Artist" ->
                                     artist = it.value as String
                                 "Length" ->
-//                                Log.i("duration", it.value.toString())
                                     duration = it.value.toString().toInt()
                                 "Id" ->
                                     id = it.value.toString().toInt()
@@ -235,26 +203,12 @@ class MainActivity : AppCompatActivity() {
                         val song = Song(title, artist, album, imageUrl, audioUrl, duration, id, false)
                         songLibrary.add(song)
                         songLib.songLib = songLibrary
-                        //Log.i("Song", song.toString())
                     }
                 }
-
-                //Log.i("songLibrary", songLibrary.toString())
             }
-
             override fun onCancelled(error: DatabaseError) {
                 Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
             }
-
         })
-
-//        val songRef: StorageReference = storageRef.child("Songs/NiceSwing.mp3")
-//        songRef.downloadUrl.addOnSuccessListener {
-//            // Got the download URL for 'users/me/profile.png'
-//            Log.v("fb", "URI: $it")
-//        }.addOnFailureListener {
-//            // Handle any errors
-//            Log.e("firebase", "Error getting data", it)
-//        }
     }
 }

@@ -1,10 +1,5 @@
 package edu.ucsb.cs.cs184.matthewreddick.soundify
 
-import android.media.Image
-import android.util.Log
-import kotlin.math.log
-
-
 class Song(
     title: String,
     artist: String,

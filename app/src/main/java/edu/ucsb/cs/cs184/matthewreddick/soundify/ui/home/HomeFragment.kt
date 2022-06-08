@@ -26,12 +26,7 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
-    //lateinit var playerObject: Player
-    private lateinit var accessToken : String
-    //private lateinit var playerObject : Player
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -96,19 +91,11 @@ class HomeFragment : Fragment() {
             4, false)
         soundcloudSongs = mutableListOf(soundCloudSong1, soundCloudSong2, soundCloudSong3)
 
-//        if(getActivity() != null){
-//            val i : Intent? = getActivity()?.getIntent()
-//            if (i != null) {
-//                playerObject = i.getSerializableExtra("playerObject") as Player
-//            }
-//            //Log.i("HomeFragment","accessToken")
-//        }
-
         val spotifyListView = binding.spotifyList
         val soundcloudListView = binding.soundcloudList
 
-        var soundCloud: customAdapterSoundCloud = customAdapterSoundCloud()
-        var spotify: customAdapterSpotify = customAdapterSpotify()
+        var soundCloud = customAdapterSoundCloud()
+        var spotify = customAdapterSpotify()
 
         searchBar.setOnEditorActionListener {view, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
@@ -154,6 +141,7 @@ class HomeFragment : Fragment() {
         return root
     }
 
+    //countMatches function taken from geeks for geeks
     fun countMatches(string: String, pattern: String): Int {
         var index = 0
         var count = 0
