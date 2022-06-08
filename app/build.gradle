@@ -42,9 +42,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-//    kotlinOptions {
-//        jvmTarget = '1.8'
-//    }
+
     buildFeatures {
         viewBinding true
     }
@@ -63,7 +61,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
     implementation 'com.google.firebase:firebase-database-ktx:20.0.5'
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
-    /*implementation 'com.squareup.okhttp:okhttp:2.5.0'*/
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.spotify.android:auth:2.0.1'
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'

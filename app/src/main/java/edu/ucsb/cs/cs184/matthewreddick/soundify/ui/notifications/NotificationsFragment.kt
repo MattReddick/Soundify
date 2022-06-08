@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import edu.ucsb.cs.cs184.matthewreddick.soundify.R
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentNotificationsBinding
 import edu.ucsb.cs.cs184.matthewreddick.soundify.playerObject
-import edu.ucsb.cs.cs184.matthewreddick.soundify.ui.dashboard.playPause
+import edu.ucsb.cs.cs184.matthewreddick.soundify.ui.search.playPause
 
 lateinit var queueList: NotificationsFragment.CustomAdapterQueue
 private var con : Context?= null

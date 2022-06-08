@@ -6,10 +6,10 @@
     app:startDestination="@+id/navigation_home">
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="edu.ucsb.cs.cs184.matthewreddick.soundify.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_search"
+        android:name="edu.ucsb.cs.cs184.matthewreddick.soundify.ui.search.SearchFragment"
+        android:label="@string/title_search"
+        tools:layout="@layout/fragment_search" />
 
     <fragment
         android:id="@+id/navigation_home"
