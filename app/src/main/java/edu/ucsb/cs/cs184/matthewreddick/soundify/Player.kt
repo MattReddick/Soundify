@@ -31,13 +31,11 @@ class Player : Serializable {
     var mediaPlayer: MediaPlayer? = null
     private var length:Int = 0
     private var imageView : ImageView? = null
-
     private var spotifyAppRemote: SpotifyAppRemote? = null
     private val CLIENT_ID = "e01fcf6eba35472bb4aa1db36bf92863"
     private val REDIRECT_URI = "edu.ucsb.cs.cs184.matthewreddick.soundify://callback"
     private var mainContext : Context ?= null
     private val TAG = "SpotifyPlayer Class"
-
     private var trackWasStartedSpotify = false
 
     fun getLoop(): Boolean {
@@ -59,12 +57,6 @@ class Player : Serializable {
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .build()
         )
-
-    }
-
-    private fun logMessage(msg: String, duration: Int = Toast.LENGTH_SHORT) {
-        Toast.makeText(mainContext, msg, duration).show()
-        Log.d(TAG, msg)
     }
 
     private fun playSpotify(track_uri : String) {
