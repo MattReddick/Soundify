@@ -1,7 +1,6 @@
 package edu.ucsb.cs.cs184.matthewreddick.soundify
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.util.Log
@@ -17,7 +16,6 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.Serializable
-import java.net.URL
 import java.util.*
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -37,11 +35,9 @@ class Player : Serializable {
 
     private var spotifyAppRemote: SpotifyAppRemote? = null
     private val CLIENT_ID = "e01fcf6eba35472bb4aa1db36bf92863"
-    /*val REDIRECT_URI = "comspotifytestsdk://callback"*/
     private val REDIRECT_URI = "edu.ucsb.cs.cs184.matthewreddick.soundify://callback"
     private var mainContext : Context ?= null
     private val TAG = "SpotifyPlayer Class"
-    private var isPlaying : Boolean = false
 
     private var trackWasStartedSpotify = false
 
@@ -72,9 +68,8 @@ class Player : Serializable {
         Log.d(TAG, msg)
     }
 
-    fun playSpotify(track_uri : String) {
+    private fun playSpotify(track_uri : String) {
         playUri(track_uri)
-        //trackWasStarted = true
         started = true
     }
 
@@ -89,7 +84,6 @@ class Player : Serializable {
     }
 
     private fun logError(throwable: Throwable) {
-
         Toast.makeText(mainContext, "test string", Toast.LENGTH_SHORT).show()
         Log.e(TAG, "", throwable)
     }
@@ -101,15 +95,14 @@ class Player : Serializable {
         lifecycleScope.launch {
             try {
                 spotifyAppRemote = connectToAppRemote(showAuthView)
-                onConnected()
                 spotifyAppRemote?.playerApi?.subscribeToPlayerState()?.setEventCallback {
                     val hasEnded : Boolean = handleTrackEnded(it)
                     Log.i("Has Ended", hasEnded.toString())
-                    if(hasEnded==true) {
+                    if(hasEnded) {
                         assertAppRemoteConnected().let {
                             it.playerApi
                                 .playerState
-                                .setResultCallback { playerState ->
+                                .setResultCallback { _ ->
                                     it.playerApi
                                         .pause()
                                         //.setResultCallback { logMessage("tmp") }
@@ -124,11 +117,10 @@ class Player : Serializable {
                 Log.i("PlayerClass","Connected")
             } catch (error: Throwable) {
                 disconnect()
-                //logError(error)
             }
         }
     }
-    fun onPlayPauseButtonClicked() {
+    private fun onPlayPauseButtonClicked() {
         Log.i("PAUSING1","here")
         assertAppRemoteConnected().let {
             it.playerApi
@@ -148,7 +140,6 @@ class Player : Serializable {
                     }
                 }
         }
-
     }
 
     fun getCurrentPosition(): Int {
@@ -185,7 +176,6 @@ class Player : Serializable {
                 return it
             }
         }
-        //Log.e(TAG, getString(R.string.err_spotify_disconnected))
         throw SpotifyDisconnectedException()
     }
 
@@ -231,9 +221,7 @@ class Player : Serializable {
         }
     }
 
-    //Be sure to pass context
-
-    private suspend fun connectToAppRemote(showAuthView: Boolean): SpotifyAppRemote? =
+    private suspend fun connectToAppRemote(showAuthView: Boolean): SpotifyAppRemote =
         suspendCoroutine { cont: Continuation<SpotifyAppRemote> ->
             SpotifyAppRemote.connect(
                 mainContext?.applicationContext,
@@ -251,9 +239,6 @@ class Player : Serializable {
                     }
                 })
         }
-    fun onConnected() {
-
-    }
 
     fun getCurrentSong() : Song? {
         return currentSong
@@ -289,7 +274,7 @@ class Player : Serializable {
                 it.playerApi
                     .playerState
                     .setResultCallback { playerState ->
-                        if(playerState.isPaused == false) {
+                        if(!playerState.isPaused) {
                             it.playerApi
                                 .pause()
                                 //.setResultCallback { logMessage("tmp") }
@@ -308,7 +293,7 @@ class Player : Serializable {
                 it.playerApi
                     .playerState
                     .setResultCallback { playerState ->
-                        if(playerState.isPaused == false) {
+                        if(!playerState.isPaused) {
                             it.playerApi
                                 .pause()
                                 //.setResultCallback { logMessage("tmp") }
@@ -316,7 +301,7 @@ class Player : Serializable {
                         }
                     }
             }
-            if (mediaPlayer!!.isPlaying){
+            if (mediaPlayer!!.isPlaying) {
                 mediaPlayer!!.stop()
                 Thread.sleep(100)
             }
@@ -350,7 +335,7 @@ class Player : Serializable {
                 it.playerApi
                     .playerState
                     .setResultCallback { playerState ->
-                        if(playerState.isPaused == false) {
+                        if(!playerState.isPaused) {
                             it.playerApi
                                 .pause()
                                 //.setResultCallback { logMessage("tmp") }
@@ -369,7 +354,7 @@ class Player : Serializable {
                 it.playerApi
                     .playerState
                     .setResultCallback { playerState ->
-                        if(playerState.isPaused == false) {
+                        if(!playerState.isPaused) {
                             it.playerApi
                                 .pause()
                                 //.setResultCallback { logMessage("tmp") }
@@ -414,15 +399,14 @@ class Player : Serializable {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        //Log.v(TAG,"Music is streaming")
         started = true
     }
 
-    public fun setImageView(newImageView : ImageView) {
+    fun setImageView(newImageView : ImageView) {
         imageView = newImageView
     }
 
-    fun updateTrackCoverArtSpotify(playerState: PlayerState) {
+    private fun updateTrackCoverArtSpotify(playerState: PlayerState) {
         // Get image from track
         if(imageView != null) {
             assertAppRemoteConnected()
@@ -461,6 +445,5 @@ class Player : Serializable {
             Picasso.get().load(url).into(imageView)
         }
     }
-
 }
 

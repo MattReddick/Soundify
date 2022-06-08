@@ -29,9 +29,6 @@ class DashboardFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
-
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -99,11 +96,12 @@ class DashboardFragment : Fragment(){
         curTime.text = "0:00"
         remTime.text = "-0:00"
 
-        Thread(Runnable {
-            var mediaOrSpotify = 0
+        Thread {
             while (progress < 100) {
                 if (playerObject.getCurrentSong() != null) {
-                    mediaOrSpotify = if (!playerObject.getCurrentSong()!!.isSpotify() && playerObject.mediaPlayer != null) {
+                    var mediaOrSpotify = if (!playerObject.getCurrentSong()!!
+                            .isSpotify() && playerObject.mediaPlayer != null
+                    ) {
                         playerObject.mediaPlayer!!.currentPosition
 
                     } else {
@@ -134,9 +132,9 @@ class DashboardFragment : Fragment(){
                 } else progress = 0
 
                 // Update the progress bar and display the current value
-                handler.post(Runnable {
+                handler.post {
                     progressBar.progress = progress
-                })
+                }
                 try {
                     Thread.sleep(100)
                 } catch (e: InterruptedException) {
@@ -144,7 +142,7 @@ class DashboardFragment : Fragment(){
                 }
             }
 
-        }).start()
+        }.start()
         return root
     }
 

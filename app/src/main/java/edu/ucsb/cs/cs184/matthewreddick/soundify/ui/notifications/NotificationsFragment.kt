@@ -9,20 +9,15 @@ import android.widget.BaseAdapter
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import edu.ucsb.cs.cs184.matthewreddick.soundify.R
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentNotificationsBinding
 import edu.ucsb.cs.cs184.matthewreddick.soundify.playerObject
 
-
-lateinit var queueList: NotificationsFragment.customAdapterQueue
+lateinit var queueList: NotificationsFragment.CustomAdapterQueue
 
 class NotificationsFragment : Fragment() {
 
     private var _binding: FragmentNotificationsBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -30,9 +25,6 @@ class NotificationsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val notificationsViewModel =
-            ViewModelProvider(this).get(NotificationsViewModel::class.java)
-
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -41,38 +33,38 @@ class NotificationsFragment : Fragment() {
         val shuffle = binding.shuffleQueue
         shuffle.setOnClickListener {
             playerObject.shuffleQueue()
-            queueList = customAdapterQueue()
+            queueList = CustomAdapterQueue()
             queueListView.adapter = queueList
         }
 
-        queueList = customAdapterQueue()
+        queueList = CustomAdapterQueue()
         queueListView.adapter = queueList
         return root
     }
-    class customAdapterQueue: BaseAdapter() {
+
+    class CustomAdapterQueue: BaseAdapter() {
         override fun getCount(): Int {
             return playerObject.queue!!.size
         }
 
         override fun getItem(p0: Int): Any {
-            if (p0 < playerObject.queue!!.size)
-                return playerObject.queue!![p0]
+            return if (p0 < playerObject.queue!!.size)
+                playerObject.queue!![p0]
             else {
                 Log.i("index bigger than spotifySongs.size, returning last element",
                     playerObject.queue!!.size.toString())
-                return playerObject.queue!![playerObject.queue!!.size - 1]
+                playerObject.queue!![playerObject.queue!!.size - 1]
             }
 
         }
 
         override fun getItemId(p0: Int): Long {
-            //added getters and setters in Song class
-            if (p0 < playerObject.queue!!.size)
-                return playerObject.queue!![p0].getId()!!.toLong()
+            return if (p0 < playerObject.queue!!.size)
+                playerObject.queue!![p0].getId()!!.toLong()
             else {
                 Log.i("index bigger than spotifySongs.size, returning last element id",
                     playerObject.queue!!.size.toString())
-                return playerObject.queue!![playerObject.queue!!.size - 1].getId()!!.toLong()
+                playerObject.queue!![playerObject.queue!!.size - 1].getId()!!.toLong()
             }
         }
 
@@ -88,15 +80,14 @@ class NotificationsFragment : Fragment() {
 
             var removeFromQueueBtn = myViewSoundCloud.findViewById<ImageButton>(R.id.removeFromQueue)
             if (playerObject.queue!![p0].isSpotify()) {
-                removeFromQueueBtn = myViewSpotify.findViewById<ImageButton>(R.id.removeFromQueue)
+                removeFromQueueBtn = myViewSpotify.findViewById(R.id.removeFromQueue)
             }
-            removeFromQueueBtn.setOnClickListener() {
+            removeFromQueueBtn.setOnClickListener {
                 if (playerObject.queue!!.size > 0) playerObject.queue!!.remove(playerObject.queue!![p0])
                 queueList.notifyDataSetChanged()
             }
 
-            songTextSoundCloud.setOnClickListener() {
-                //need to update image view, song, and artist part of media player, should use play next
+            songTextSoundCloud.setOnClickListener {
                 if (playerObject.queue!!.size > 0) {
                     val tempIndex = playerObject.queue!!.indexOf(playerObject.queue!![p0])
                     playerObject.currentSongIndex = tempIndex - 1
@@ -104,8 +95,7 @@ class NotificationsFragment : Fragment() {
                 }
             }
 
-            songTextSpotify.setOnClickListener() {
-                ////need to update image view, song, and artist part of media player, use play next
+            songTextSpotify.setOnClickListener {
                 if (playerObject.queue!!.size > 0) {
                     val tempIndex = playerObject.queue!!.indexOf(playerObject.queue!![p0])
                     playerObject.currentSongIndex = tempIndex - 1

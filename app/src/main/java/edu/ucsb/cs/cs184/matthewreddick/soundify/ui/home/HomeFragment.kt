@@ -1,7 +1,6 @@
 package edu.ucsb.cs.cs184.matthewreddick.soundify.ui.home
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -10,13 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
-import android.widget.TextView.OnEditorActionListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import edu.ucsb.cs.cs184.matthewreddick.soundify.*
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentHomeBinding
-import kotlinx.android.synthetic.main.activity_main.*
-
 
 private lateinit var spotifySongs : MutableList<Song>
 private lateinit var soundcloudSongs : MutableList<Song>
@@ -33,9 +28,6 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -94,10 +86,10 @@ class HomeFragment : Fragment() {
         val spotifyListView = binding.spotifyList
         val soundcloudListView = binding.soundcloudList
 
-        var soundCloud = customAdapterSoundCloud()
-        var spotify = customAdapterSpotify()
+        val soundCloud = CustomAdapterSoundCloud()
+        val spotify = CustomAdapterSpotify()
 
-        searchBar.setOnEditorActionListener {view, actionId, keyEvent ->
+        searchBar.setOnEditorActionListener {_, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
             keyEvent.action == KeyEvent.ACTION_DOWN || keyEvent.action == KeyEvent.KEYCODE_ENTER) {
 
@@ -105,10 +97,10 @@ class HomeFragment : Fragment() {
 
                 soundcloudSongs.clear()
 
-                for (i in 0..(songLib.songLib.size - 1)) {
-                    if (countMatches(songLib.songLib[i].getArtist()!!.lowercase(), searchBarResults) > 0 ||
-                        countMatches(songLib.songLib[i].getTitle()!!.lowercase(), searchBarResults) > 0 ||
-                        countMatches(songLib.songLib[i].getAlbum()!!.lowercase(), searchBarResults) > 0) {
+                for (i in 0 until songLib.songLib.size) {
+                    if (countMatches(songLib.songLib[i].getArtist()!!.lowercase(), searchBarResults.lowercase()) > 0 ||
+                        countMatches(songLib.songLib[i].getTitle()!!.lowercase(), searchBarResults.lowercase()) > 0 ||
+                        countMatches(songLib.songLib[i].getAlbum()!!.lowercase(), searchBarResults.lowercase()) > 0) {
                         soundcloudSongs.add(songLib.songLib[i])
                     }
                 }
@@ -118,7 +110,7 @@ class HomeFragment : Fragment() {
                 val temp = (activity as MainActivity).searchSpotify(searchBar.text.toString())
                 Thread.sleep(1000)
                 Log.i("printABLE", temp.size.toString())
-                for (i in 0..(temp.size - 1)) {
+                for (i in 0 until temp.size) {
                     val newSong = Song(temp[i][0],
                         temp[i][1],
                         "",
@@ -142,7 +134,7 @@ class HomeFragment : Fragment() {
     }
 
     //countMatches function taken from geeks for geeks
-    fun countMatches(string: String, pattern: String): Int {
+    private fun countMatches(string: String, pattern: String): Int {
         var index = 0
         var count = 0
 
@@ -160,41 +152,39 @@ class HomeFragment : Fragment() {
         }
     }
 
-    class customAdapterSpotify: BaseAdapter() {
+    class CustomAdapterSpotify: BaseAdapter() {
         override fun getCount(): Int {
             return spotifySongs.size
         }
 
         override fun getItem(p0: Int): Any {
-            if (p0 < spotifySongs.size)
-                return spotifySongs[p0]
+            return if (p0 < spotifySongs.size)
+                spotifySongs[p0]
             else {
                 Log.i("index bigger than spotifySongs.size, returning last element",
                     spotifySongs.size.toString())
-                return spotifySongs[spotifySongs.size - 1]
+                spotifySongs[spotifySongs.size - 1]
             }
 
         }
 
         override fun getItemId(p0: Int): Long {
-            //added getters and setters in Song class
-            if (p0 < spotifySongs.size)
-                return spotifySongs[p0].getId()!!.toLong()
+            return if (p0 < spotifySongs.size)
+                spotifySongs[p0].getId()!!.toLong()
             else {
                 Log.i("index bigger than spotifySongs.size, returning last element id",
                     spotifySongs.size.toString())
-                return spotifySongs[spotifySongs.size - 1].getId()!!.toLong()
+                spotifySongs[spotifySongs.size - 1].getId()!!.toLong()
             }
         }
 
         override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
-
             val li = LayoutInflater.from(p2!!.context)
             val myView = li.inflate(R.layout.spotify_item, null)
             val songText: TextView = myView.findViewById(R.id.songTextName)
             songText.text = spotifySongs[p0].getTitle() + " - " + spotifySongs[p0].getArtist()
             val addToQueueBtn = myView.findViewById<ImageButton>(R.id.addToQueue)
-            addToQueueBtn.setOnClickListener() {
+            addToQueueBtn.setOnClickListener {
                 playerObject.addToQueue(spotifySongs[p0])
                 Toast.makeText(con, "queued " + spotifySongs[p0].getTitle(), Toast.LENGTH_SHORT).show()
             }
@@ -202,30 +192,29 @@ class HomeFragment : Fragment() {
         }
     }
 
-    class customAdapterSoundCloud: BaseAdapter() {
+    class CustomAdapterSoundCloud: BaseAdapter() {
         override fun getCount(): Int {
             return soundcloudSongs.size
         }
 
         override fun getItem(p0: Int): Any {
-            if (p0 < soundcloudSongs.size)
-                return soundcloudSongs[p0]
+            return if (p0 < soundcloudSongs.size)
+                soundcloudSongs[p0]
             else {
                 Log.i("index bigger than spotifySongs.size, returning last element",
                     soundcloudSongs.size.toString())
-                return soundcloudSongs[soundcloudSongs.size - 1]
+                soundcloudSongs[soundcloudSongs.size - 1]
             }
 
         }
 
         override fun getItemId(p0: Int): Long {
-            //added getters and setters in Song class
-            if (p0 < soundcloudSongs.size)
-                return soundcloudSongs[p0].getId()!!.toLong()
+            return if (p0 < soundcloudSongs.size)
+                soundcloudSongs[p0].getId()!!.toLong()
             else {
                 Log.i("index bigger than spotifySongs.size, returning last element id",
                     soundcloudSongs.size.toString())
-                return soundcloudSongs[soundcloudSongs.size - 1].getId()!!.toLong()
+                soundcloudSongs[soundcloudSongs.size - 1].getId()!!.toLong()
             }
         }
 
@@ -236,7 +225,7 @@ class HomeFragment : Fragment() {
             val songText: TextView = myView.findViewById(R.id.songTextName)
             songText.text = soundcloudSongs[p0].getTitle() + " - " + soundcloudSongs[p0].getArtist()
             val addToQueueBtn = myView.findViewById<ImageButton>(R.id.addToQueue)
-            addToQueueBtn.setOnClickListener() {
+            addToQueueBtn.setOnClickListener {
                 playerObject.addToQueue(soundcloudSongs[p0])
                 Toast.makeText(con, "queued " + soundcloudSongs[p0].getTitle(), Toast.LENGTH_SHORT).show()
             }
