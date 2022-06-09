@@ -39,11 +39,11 @@ This class contains the relevant information that a song should have.
 
 The isSpotify variable allows us to see if a song in the queue came from the Spotify or if it came from the Firebase Library.
 
-#### Player Class
+### Player Class
 
 Contains functions and variable that handle playing the music.
 
-Variables:
+#### Variables:
 
 - Current Song (Song)
 - Queue (List of Songs)
