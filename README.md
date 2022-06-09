@@ -10,19 +10,55 @@ can queue up music from both platforms without having to alternate between both.
 
 
 # UI Design
-## Player Page (Home)
-- Design is supposed to resemble that of a typical music player application. Page includes: Album Art, Artist Name, Song name, Progress Bar, Play Button, PlayNext Button, PlayPrevious Button, Shuffle, and Repeat Song Button.
+### Player Page (Home)
+Design is supposed to resemble that of a typical music player application. The page includes: Album Art, Artist Name, Song name, Progress Bar, Play Button, PlayNext Button, PlayPrevious Button, Shuffle, and Repeat Song Button. On this page, users have the functionality associated with the listed buttons and UI mention in the previous sentence.
 
 
-## Search Page
-- Design is supposed to resemble that of a typical search page. The search bar is at the top. We decided to use to listviews to display song results. One listview is for Spotify songs and the second is for Soundcloud Firebase songs. 
+### Search Page
+Design is supposed to resemble that of a typical search page. The search bar is at the top. We decided to use to listviews to display song results. One listview is for Spotify songs and the second is for Soundcloud Firebase songs. On this page, users are able to search for songs and add songs to the queue.  
 
 
-##
+### Queue Page
+Design is supposed to resemble that of a typical queue page on music player application. On this page, users have the ability to delete songs and shuffle the order of the queue around. 
 
-From a UI design perspective, we ultimately decided to make the UI look like a typical music player, like one that you would find on either Apple Music or Spotify. That way, new users could easily pick up on how to use the app. Even our search and queue pages are easy to learn how to use since their designs are familiar to that of other applications users likely used in the past.
+# Code Structure
 
-From a code design perspective. We ultimately decided to use 3 main fragments to draw out the different pages of our app. The Main Activity contains the navigation view that displays the fragments. We also implemented a Song class which contains the necessary values that a song would need to have such as its title, artist name, duration, url string linked to audio data, as well as a variable telling us if the song came from Spotify or our Soundcloud Firebase Library.
+We ultimately decided to use 3 main fragments to draw out the different pages of our app. The MainActivity contains the navigation view that displays the fragments. We also implemented a Song class that represents a song and a Player class that handles the playing of music and queueing of songs. 
+
+### Song Class
+This class contains the relevant information that a song should have.
+
+- Song Title (String)
+- Artist (String)
+- Album Name (String)
+- Audio URL (String)
+- Image URL (String)
+- isSpotify (Boolean)
+- Duration (Int)
+- ID (Int)
+
+The isSpotify variable allows us to see if a song in the queue came from the Spotify or if it came from the Firebase Library.
+
+### Player Class
+
+Contains functions and variable that handle playing the music.
+
+Variables:
+
+- Current Song (Song)
+- Queue (List of Songs)
+- Progress Bar
+- Album Art (ImageView)
+
+Functions:
+
+- Play/Pause()
+- PlayNext()
+- PlayPrevious()
+- Shuffle()
+- Loop()
+- Spotify SDK/Firebase functions
+- - df
 
 The Player class is the class that actually plays the music. The Player has a variable to keep track of the current song playing and a list of the current queue. Since Spotify uses an SDK to play its music and Firebase uses the android studio native MediaPlayer class, we had to create two different ways to play music and figure out a way to smoothly transition between the Spotify SDK and MediaPlayer. That is why the song class contains the isSpotify variable, to help us identify which player to use. 
 
