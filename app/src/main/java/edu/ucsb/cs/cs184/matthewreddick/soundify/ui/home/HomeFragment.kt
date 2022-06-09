@@ -15,7 +15,6 @@ import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentHomeBinding
 
 private lateinit var spotifySongs : MutableList<Song>
 private lateinit var soundcloudSongs : MutableList<Song>
-private var con : Context ?= null
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -28,8 +27,6 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        con = context
 
         val searchBar : EditText = root.findViewById(R.id.search_bar) as EditText
 
@@ -84,8 +81,8 @@ class HomeFragment : Fragment() {
         val spotifyListView = binding.spotifyList
         val soundcloudListView = binding.soundcloudList
 
-        val soundCloud = CustomAdapterSoundCloud()
-        val spotify = CustomAdapterSpotify()
+        val soundCloud = context?.let { CustomAdapterSoundCloud(it) }
+        val spotify = context?.let { CustomAdapterSpotify(it) }
 
         searchBar.setOnEditorActionListener {_, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
@@ -152,7 +149,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    class CustomAdapterSpotify: BaseAdapter() {
+    class CustomAdapterSpotify(con: Context): BaseAdapter() {
+        private val curCon = con
         override fun getCount(): Int {
             return spotifySongs.size
         }
@@ -186,13 +184,14 @@ class HomeFragment : Fragment() {
             val addToQueueBtn = myView.findViewById<ImageButton>(R.id.addToQueue)
             addToQueueBtn.setOnClickListener {
                 playerObject.addToQueue(spotifySongs[p0])
-                Toast.makeText(con, "queued " + spotifySongs[p0].getTitle(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(curCon, "queued " + spotifySongs[p0].getTitle(), Toast.LENGTH_SHORT).show()
             }
             return myView
         }
     }
 
-    class CustomAdapterSoundCloud: BaseAdapter() {
+    class CustomAdapterSoundCloud(con: Context): BaseAdapter() {
+        private val curCon = con
         override fun getCount(): Int {
             return soundcloudSongs.size
         }
@@ -227,7 +226,7 @@ class HomeFragment : Fragment() {
             val addToQueueBtn = myView.findViewById<ImageButton>(R.id.addToQueue)
             addToQueueBtn.setOnClickListener {
                 playerObject.addToQueue(soundcloudSongs[p0])
-                Toast.makeText(con, "queued " + soundcloudSongs[p0].getTitle(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(curCon, "queued " + soundcloudSongs[p0].getTitle(), Toast.LENGTH_SHORT).show()
             }
             return myView
         }

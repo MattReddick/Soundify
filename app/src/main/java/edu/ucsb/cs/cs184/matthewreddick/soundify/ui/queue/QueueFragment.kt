@@ -17,7 +17,6 @@ import edu.ucsb.cs.cs184.matthewreddick.soundify.playerObject
 import edu.ucsb.cs.cs184.matthewreddick.soundify.ui.search.playPause
 
 lateinit var queueList: QueueFragment.CustomAdapterQueue
-private var con : Context?= null
 
 class QueueFragment : Fragment() {
     private var _binding: FragmentQueueBinding? = null
@@ -31,24 +30,23 @@ class QueueFragment : Fragment() {
         _binding = FragmentQueueBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        con = context
-
         playerObject.inQueueFragment = true
         val queueListView = binding.QueueList
 
         val shuffle = binding.shuffleQueue
         shuffle.setOnClickListener {
             playerObject.shuffleQueue()
-            queueList = CustomAdapterQueue()
+            queueList = context?.let { it1 -> CustomAdapterQueue(it1) }!!
             queueListView.adapter = queueList
         }
 
-        queueList = CustomAdapterQueue()
+        queueList = context?.let { CustomAdapterQueue(it) }!!
         queueListView.adapter = queueList
         return root
     }
 
-    class CustomAdapterQueue: BaseAdapter() {
+    class CustomAdapterQueue(con: Context): BaseAdapter() {
+        private val curCon = con
         override fun getCount(): Int {
             return playerObject.queue!!.size
         }
@@ -74,6 +72,16 @@ class QueueFragment : Fragment() {
             }
         }
 
+        private fun playSongFromQueue(index: Int) {
+            if (playerObject.queue!!.size > 0) {
+                val tempIndex = playerObject.queue!!.indexOf(playerObject.queue!![index])
+                playerObject.currentSongIndex = tempIndex - 1
+                playerObject.playNext()
+                playPause = true
+                Toast.makeText(curCon, "now playing " + playerObject.queue!![index].getTitle(), Toast.LENGTH_SHORT).show()
+            }
+        }
+
         override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
             val li = LayoutInflater.from(p2!!.context)
             val myViewSoundCloud = li.inflate(R.layout.soundcloud_queue_item, null)
@@ -94,23 +102,11 @@ class QueueFragment : Fragment() {
             }
 
             songTextSoundCloud.setOnClickListener {
-                if (playerObject.queue!!.size > 0) {
-                    val tempIndex = playerObject.queue!!.indexOf(playerObject.queue!![p0])
-                    playerObject.currentSongIndex = tempIndex - 1
-                    playerObject.playNext()
-                    playPause = true
-                    Toast.makeText(con, "now playing " + playerObject.queue!![p0].getTitle(), Toast.LENGTH_SHORT).show()
-                }
+                playSongFromQueue(p0)
             }
 
             songTextSpotify.setOnClickListener {
-                if (playerObject.queue!!.size > 0) {
-                    val tempIndex = playerObject.queue!!.indexOf(playerObject.queue!![p0])
-                    playerObject.currentSongIndex = tempIndex - 1
-                    playerObject.playNext()
-                    playPause = true
-                    Toast.makeText(con, "now playing " + playerObject.queue!![p0].getTitle(), Toast.LENGTH_SHORT).show()
-                }
+                playSongFromQueue(p0)
             }
             if (playerObject.queue!![p0].isSpotify()) {
                 return myViewSpotify
