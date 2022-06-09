@@ -39,7 +39,7 @@ This class contains the relevant information that a song should have.
 
 The isSpotify variable allows us to see if a song in the queue came from the Spotify or if it came from the Firebase Library.
 
-### Player Class
+#### Player Class
 
 Contains functions and variable that handle playing the music.
 
@@ -49,8 +49,10 @@ Variables:
 - Queue (List of Songs)
 - Progress Bar
 - Album Art (ImageView)
+- SpotifyPlayer
+- FirebasePlayer (MediaPlayer)
 
-Functions:
+#### Functions:
 
 - Play/Pause()
 - PlayNext()
@@ -58,11 +60,20 @@ Functions:
 - Shuffle()
 - Loop()
 - Spotify SDK/Firebase functions
-- - df
+  - Handle Data Retrieving
 
-The Player class is the class that actually plays the music. The Player has a variable to keep track of the current song playing and a list of the current queue. Since Spotify uses an SDK to play its music and Firebase uses the android studio native MediaPlayer class, we had to create two different ways to play music and figure out a way to smoothly transition between the Spotify SDK and MediaPlayer. That is why the song class contains the isSpotify variable, to help us identify which player to use. 
+Since Spotify uses an SDK to play its music and Firebase uses the android studio native MediaPlayer class, we had to create two different ways to play music and figure out a way to smoothly transition between the Spotify SDK and MediaPlayer.
+
+To play the music from all fragments continuously we had to make it global. The most global class in the application is MainActivity. It is continuously running in the background since it is the class that is displaying the fragments. So we decided to create the player object from the MainActivity, that way it will also run continuously in the background. If changes need to be made to the player, each fragment is able to access the player by accessing MainActivity. 
+
+# Data
+### Spotify
+
+We use authentication tokens to communicate with Spotify's servers. When searching for a song in Spotify's library, we make an HTTP request and we recieve a JSON formatted text that contains information about songs that are related to our search. Ex. If we make and HTTP request using the string "Justin Beiber" the JSON will contain the top 10 results relating to Justin Beiber. Once we parse the song data, we can use the Spotify SDK to play the song.
+
+#### Firebase
 
 Due to issues with Soundcloud’s API not being public, we had to create our own Music Library so we decided to do that using Firebase. In Firebase, we stored several songs which each stored the basic values of a Song Class. The links that each song has are connected to files that are saved within the Firebase storage. MediaPlayer has the option of playing songs using URLs, so when we feed MediaPlayer the URL, it fetches it from the Firebase storage. 
 
-In order to be able to play the music from all fragments continuously we had to make it global. The most global class in the application is MainActivity. It is continuously running in the background since it is the class that is displaying the fragments. So we decided to create the player object from the MainActivity, that way it will also run continuously in the background. If changes need to be made to the player, each fragment is able to access the player by accessing MainActivity. 
+
 
