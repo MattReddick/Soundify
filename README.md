@@ -11,7 +11,8 @@ can queue up music from both platforms without having to alternate between both.
 
 # UI Design
 ## Player (Home Page)
-- Typical Music 
+- Design is supposed to resemble that
+- -  
 
 From a UI design perspective, we ultimately decided to make the UI look like a typical music player, like one that you would find on either Apple Music or Spotify. That way, new users could easily pick up on how to use the app. Even our search and queue pages are easy to learn how to use since their designs are familiar to that of other applications users likely used in the past.
 
