@@ -32,10 +32,10 @@ class Player : Serializable {
     private var length:Int = 0
     private var imageView : ImageView? = null
     private var spotifyAppRemote: SpotifyAppRemote? = null
-    private val CLIENT_ID = "e01fcf6eba35472bb4aa1db36bf92863"
-    private val REDIRECT_URI = "edu.ucsb.cs.cs184.matthewreddick.soundify://callback"
+    private val clientId = "e01fcf6eba35472bb4aa1db36bf92863"
+    private val redirectURI = "edu.ucsb.cs.cs184.matthewreddick.soundify://callback"
     private var mainContext : Context ?= null
-    private val TAG = "SpotifyPlayer Class"
+    private val tag = "SpotifyPlayer Class"
     private var trackWasStartedSpotify = false
 
     fun getLoop(): Boolean {
@@ -76,7 +76,7 @@ class Player : Serializable {
 
     private fun logError(throwable: Throwable) {
         Toast.makeText(mainContext, "test string", Toast.LENGTH_SHORT).show()
-        Log.e(TAG, "", throwable)
+        Log.e(tag, "", throwable)
     }
 
     private fun connect(showAuthView: Boolean, context: Context, lifecycleScope : LifecycleCoroutineScope) {
@@ -202,8 +202,8 @@ class Player : Serializable {
         suspendCoroutine { cont: Continuation<SpotifyAppRemote> ->
             SpotifyAppRemote.connect(
                 mainContext?.applicationContext,
-                ConnectionParams.Builder(CLIENT_ID)
-                    .setRedirectUri(REDIRECT_URI)
+                ConnectionParams.Builder(clientId)
+                    .setRedirectUri(redirectURI)
                     .showAuthView(showAuthView)
                     .build(),
                 object : Connector.ConnectionListener {

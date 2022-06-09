@@ -52,7 +52,6 @@ class QueueFragment : Fragment() {
                     playerObject.queue!!.size.toString())
                 playerObject.queue!![playerObject.queue!!.size - 1]
             }
-
         }
 
         override fun getItemId(p0: Int): Long {

@@ -204,7 +204,6 @@ class HomeFragment : Fragment() {
                     soundcloudSongs.size.toString())
                 soundcloudSongs[soundcloudSongs.size - 1]
             }
-
         }
 
         override fun getItemId(p0: Int): Long {
@@ -218,7 +217,6 @@ class HomeFragment : Fragment() {
         }
 
         override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
-
             val li = LayoutInflater.from(p2!!.context)
             val myView = li.inflate(R.layout.soundcloud_item, null)
             val songText: TextView = myView.findViewById(R.id.songTextName)

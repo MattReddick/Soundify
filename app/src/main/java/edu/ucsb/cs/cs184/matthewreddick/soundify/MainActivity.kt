@@ -30,6 +30,9 @@ import java.io.IOException
 lateinit var playerObject: Player
 var started = false
 
+const val AUTH_TOKEN_REQUEST_CODE = 0x10
+const val AUTH_CODE_REQUEST_CODE = 0x11
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     lateinit var songLibrary: MutableList<Song>
@@ -38,9 +41,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var databaseRef: DatabaseReference
     private lateinit var fbStorage: FirebaseStorage
     private lateinit var storageRef: StorageReference
-    private val CLIENT_ID = "e01fcf6eba35472bb4aa1db36bf92863"
-    private val AUTH_TOKEN_REQUEST_CODE = 0x10
-    private val AUTH_CODE_REQUEST_CODE = 0x11
+    private val clientId = "e01fcf6eba35472bb4aa1db36bf92863"
     private val mOkHttpClient = OkHttpClient()
     private var mAccessToken: String? = null
     private var mAccessCode: String? = null
@@ -72,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
     }
+
     private fun getRedirectUri(): Uri? {
         return Uri.Builder()
             .scheme("edu.ucsb.cs.cs184.matthewreddick.soundify")
@@ -89,12 +91,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getAuthenticationRequest(type: AuthorizationResponse.Type): AuthorizationRequest? {
-        return AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
+        return AuthorizationRequest.Builder(clientId, type, getRedirectUri().toString())
             .setShowDialog(false)
             .setScopes(arrayOf("user-read-email"))
             .setCampaign("your-campaign-token")
             .build()
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val response = AuthorizationClient.getResponse(resultCode, data)
@@ -111,12 +114,13 @@ class MainActivity : AppCompatActivity() {
 
     fun searchSpotify(input : String): MutableList<List<String>> {
         val inputEncoded : String = java.net.URLEncoder.encode(input, "utf-8")
-        val myURL : String = "https://api.spotify.com:443/v1/search?q=" + inputEncoded + "&limit=10&market=SE&offset=0&type=track"
+        val myURL : String =
+            "https://api.spotify.com:443/v1/search?q=$inputEncoded&limit=10&market=SE&offset=0&type=track"
         val request = Request.Builder()
             .url(myURL)
             .header(
                 "Authorization",
-                "Bearer " + mAccessToken
+                "Bearer $mAccessToken"
             )
             .build()
         cancelCall()
