@@ -6,17 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import edu.ucsb.cs.cs184.matthewreddick.soundify.R
 import edu.ucsb.cs.cs184.matthewreddick.soundify.databinding.FragmentQueueBinding
 import edu.ucsb.cs.cs184.matthewreddick.soundify.playerObject
 import edu.ucsb.cs.cs184.matthewreddick.soundify.ui.search.playPause
-
-lateinit var queueList: QueueFragment.CustomAdapterQueue
 
 class QueueFragment : Fragment() {
     private var _binding: FragmentQueueBinding? = null
@@ -36,12 +31,10 @@ class QueueFragment : Fragment() {
         val shuffle = binding.shuffleQueue
         shuffle.setOnClickListener {
             playerObject.shuffleQueue()
-            queueList = context?.let { it1 -> CustomAdapterQueue(it1) }!!
-            queueListView.adapter = queueList
+            queueListView.adapter = context?.let { it1 -> CustomAdapterQueue(it1) }!!
         }
 
-        queueList = context?.let { CustomAdapterQueue(it) }!!
-        queueListView.adapter = queueList
+        queueListView.adapter = context?.let { it1 -> CustomAdapterQueue(it1) }!!
         return root
     }
 
@@ -98,7 +91,7 @@ class QueueFragment : Fragment() {
             }
             removeFromQueueBtn.setOnClickListener {
                 if (playerObject.queue!!.size > 0) playerObject.queue!!.remove(playerObject.queue!![p0])
-                queueList.notifyDataSetChanged()
+                this.notifyDataSetChanged()
             }
 
             songTextSoundCloud.setOnClickListener {
