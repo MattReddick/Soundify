@@ -257,9 +257,6 @@ class Player : Serializable {
                         }
                     }
             }
-            if (mediaPlayer!!.isPlaying){
-                mediaPlayer!!.stop()
-            }
             return
         }
         currentSong = queue?.get(currentSongIndex)
