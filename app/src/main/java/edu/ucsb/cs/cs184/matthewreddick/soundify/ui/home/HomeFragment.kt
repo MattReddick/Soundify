@@ -32,9 +32,9 @@ class HomeFragment : Fragment() {
         con = context
 
         val searchBar : EditText = root.findViewById(R.id.search_bar) as EditText
+
         //create 3 songs from soundcloud and spotify and put them in a list
         //then connect them to the home UI for display
-
         val spotifySong1 = Song("True Love",
             "Kanye West",
             "Single",
@@ -95,11 +95,13 @@ class HomeFragment : Fragment() {
 
                 soundcloudSongs.clear()
 
-                for (i in 0 until songLib.songLib.size) {
-                    if (countMatches(songLib.songLib[i].getArtist()!!.lowercase(), searchBarResults.lowercase()) > 0 ||
-                        countMatches(songLib.songLib[i].getTitle()!!.lowercase(), searchBarResults.lowercase()) > 0 ||
-                        countMatches(songLib.songLib[i].getAlbum()!!.lowercase(), searchBarResults.lowercase()) > 0) {
-                        soundcloudSongs.add(songLib.songLib[i])
+                val soundCloudLib = (activity as MainActivity).songLibrary
+
+                for (i in 0 until soundCloudLib.size) {
+                    if (countMatches(soundCloudLib[i].getArtist()!!.lowercase(), searchBarResults.lowercase()) > 0 ||
+                        countMatches(soundCloudLib[i].getTitle()!!.lowercase(), searchBarResults.lowercase()) > 0 ||
+                        countMatches(soundCloudLib[i].getAlbum()!!.lowercase(), searchBarResults.lowercase()) > 0) {
+                        soundcloudSongs.add(soundCloudLib[i])
                     }
                 }
 

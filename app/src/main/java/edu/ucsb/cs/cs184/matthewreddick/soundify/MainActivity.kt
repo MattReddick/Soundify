@@ -27,18 +27,13 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
-object songLib {
-    lateinit var songLib: MutableList<Song>
-}
-
 lateinit var playerObject: Player
 var started = false
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var songLibrary: MutableList<Song>
+    lateinit var songLibrary: MutableList<Song>
     private var spotLibrary = mutableListOf<List<String>>()
-
     private lateinit var firebase: FirebaseDatabase
     private lateinit var databaseRef: DatabaseReference
     private lateinit var fbStorage: FirebaseStorage
@@ -46,7 +41,6 @@ class MainActivity : AppCompatActivity() {
     private val CLIENT_ID = "e01fcf6eba35472bb4aa1db36bf92863"
     private val AUTH_TOKEN_REQUEST_CODE = 0x10
     private val AUTH_CODE_REQUEST_CODE = 0x11
-
     private val mOkHttpClient = OkHttpClient()
     private var mAccessToken: String? = null
     private var mAccessCode: String? = null
@@ -201,7 +195,6 @@ class MainActivity : AppCompatActivity() {
                         }
                         val song = Song(title, artist, album, imageUrl, audioUrl, duration, id, false)
                         songLibrary.add(song)
-                        songLib.songLib = songLibrary
                     }
                 }
             }
