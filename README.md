@@ -10,9 +10,15 @@ can queue up music from both platforms without having to alternate between both.
 
 
 # UI Design
-## Player (Home Page)
-- Design is supposed to resemble that
-  -
+## Player Page (Home)
+- Design is supposed to resemble that of a typical music player application. Page includes: Album Art, Artist Name, Song name, Progress Bar, Play Button, PlayNext Button, PlayPrevious Button, Shuffle, and Repeat Song Button.
+
+
+## Search Page
+- Design is supposed to resemble that of a typical search page. The search bar is at the top. We decided to use to listviews to display song results. One listview is for Spotify songs and the second is for Soundcloud Firebase songs. 
+
+
+##
 
 From a UI design perspective, we ultimately decided to make the UI look like a typical music player, like one that you would find on either Apple Music or Spotify. That way, new users could easily pick up on how to use the app. Even our search and queue pages are easy to learn how to use since their designs are familiar to that of other applications users likely used in the past.
 
