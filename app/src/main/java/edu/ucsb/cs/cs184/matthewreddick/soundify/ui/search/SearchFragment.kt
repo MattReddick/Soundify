@@ -118,14 +118,19 @@ class SearchFragment : Fragment(){
                     val remTimeMinutes = (durationSeconds / 60) % 60
                     val remTimeSeconds = (durationSeconds % 60)
 
-                    if (curTimeSeconds < 10) curTime.text =
-                        curTimeMinutes.toString() + ":0" + curTimeSeconds.toString()
-                    else curTime.text =
-                        curTimeMinutes.toString() + ":" + curTimeSeconds.toString()
-                    if (remTimeSeconds < 10) remTime.text =
-                        "-" + remTimeMinutes.toString() + ":0" + remTimeSeconds.toString()
-                    else remTime.text =
-                        "-" + remTimeMinutes.toString() + ":" + remTimeSeconds.toString()
+                    if (activity != null) {
+                        (activity as MainActivity).runOnUiThread(java.lang.Runnable {
+                            if (curTimeSeconds < 10) curTime.text =
+                                curTimeMinutes.toString() + ":0" + curTimeSeconds.toString()
+                            else curTime.text =
+                                curTimeMinutes.toString() + ":" + curTimeSeconds.toString()
+                            if (remTimeSeconds < 10) remTime.text =
+                                "-" + remTimeMinutes.toString() + ":0" + remTimeSeconds.toString()
+                            else remTime.text =
+                                "-" + remTimeMinutes.toString() + ":" + remTimeSeconds.toString()
+                        })
+                    }
+
                 } else progress = 0
 
                 // Update the progress bar and display the current value
