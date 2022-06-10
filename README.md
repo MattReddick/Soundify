@@ -8,9 +8,11 @@ Soundify is a cross platform application between Soundcloud and Spotify on Andro
 can queue up music from both platforms without having to alternate between both. 
 
 # Quick Note
-->In order to run the app, a user must have Spotify and their user email must be added to a group access or else the SDK will refuse to connect
-->Current Songs in the Firebase (only songs that can be looked up from SoundCloud from our application): 
-  Animal, Closer, Law Of Attraction, Love Letter, Nice Swing, Ninjas, Pepas, So Far Above, The Calling, The Dream
+In order to run the app, a user must have Spotify and their user email must be added to a group access or else the SDK will refuse to connect
+
+Current Songs in the Firebase (only songs that can be looked up from SoundCloud from our application): 
+
+Animal, Closer, Law Of Attraction, Love Letter, Nice Swing, Ninjas, Pepas, So Far Above, The Calling, The Dream
 
 # UI Design
 ### Player Page (Home)
