@@ -7,7 +7,8 @@ Team Members: Erwan Fraisse, Cole McKim, Alon Katz, Zachary Friedland, Matthew R
 Soundify is a cross platform application between Soundcloud and Spotify on Android so that people 
 can queue up music from both platforms without having to alternate between both. 
 
-
+# Quick Note
+In order to run the app, a user must have Spotify Premium and their user email must be added to a group access or else the SDK will refuse to connect
 
 # UI Design
 ### Player Page (Home)
