@@ -15,11 +15,11 @@ Design is supposed to resemble that of a typical music player application. The p
 
 
 ### Search Page
-Design is supposed to resemble that of a typical search page. The search bar is at the top. We decided to use to listviews to display song results. One listview is for Spotify songs and the second is for Soundcloud Firebase songs. On this page, users are able to search for songs and add songs to the queue.  
+Design is supposed to resemble that of a typical search page. The search bar is at the top. We decided to use two listviews to display song results. One listview is for Spotify songs and the second is for Soundcloud Firebase songs. On this page, users are able to search for songs and add songs to the queue.  
 
 
 ### Queue Page
-Design is supposed to resemble that of a typical queue page on music player application. On this page, users have the ability to delete songs and shuffle the order of the queue around. 
+Design is supposed to resemble that of a typical queue page on music player application. On this page, users have the ability to delete songs and shuffle the order of the queue around. Users can also delete and play songs directly from the queue.
 
 # Code Structure
 
@@ -54,26 +54,26 @@ Contains functions and variable that handle playing the music.
 
 #### Functions:
 
-- Play/Pause()
+- General Play/Pause() functions
 - PlayNext()
 - PlayPrevious()
 - Shuffle()
-- Loop()
+- Loop functionality
 - Spotify SDK/Firebase functions
-  - Handle Data Retrieving
+  - Handle Data Retrieving/error handling
 
 Since Spotify uses an SDK to play its music and Firebase uses the android studio native MediaPlayer class, we had to create two different ways to play music and figure out a way to smoothly transition between the Spotify SDK and MediaPlayer.
 
-To play the music from all fragments continuously we had to make it global. The most global class in the application is MainActivity. It is continuously running in the background since it is the class that is displaying the fragments. So we decided to create the player object from the MainActivity, that way it will also run continuously in the background. If changes need to be made to the player, each fragment is able to access the player by accessing MainActivity. 
+To play the music from all fragments continuously we had to make the player class global in MainActivity. This allows the player to continuously run in the background even when displaying all of the fragments and switching between them. We decided to create the player object from the MainActivity so if changes need to be made to the player, each fragment is able to access the player by accessing MainActivity. 
 
 # Data
 ### Spotify
 
-We use authentication tokens to communicate with Spotify's servers. When searching for a song in Spotify's library, we make an HTTP request and we recieve a JSON formatted text that contains information about songs that are related to our search. Ex. If we make and HTTP request using the string "Justin Beiber" the JSON will contain the top 10 results relating to Justin Beiber. Once we parse the song data, we can use the Spotify SDK to play the song.
+We use authentication tokens to communicate with Spotify's servers. When searching for a song in Spotify's library, we make an HTTP request and we recieve a JSON formatted text that contains information about songs that are related to our search. Ex. If we make an HTTP request using the string "Justin Bieber", the JSON will contain the top 10 results relating to Justin Bieber. Once we parse the song data, we can use the Spotify SDK to play the song.
 
 ### Firebase
 
-Due to issues with Soundcloud’s API not being public, we had to create our own Music Library so we decided to do that using Firebase. In Firebase, we stored several songs which each stored the basic values of a Song Class. The links that each song has are connected to files that are saved within the Firebase storage. MediaPlayer has the option of playing songs using URLs, so when we feed MediaPlayer the URL, it fetches it from the Firebase storage. 
+Due to issues with the Soundcloud’s API not being public, we had to create our own Music Library so we decided to use Firebase. In Firebase, we stored several songs which each stored the basic values of a Song Class. The links that each song has are connected to files that are saved within the Firebase storage. MediaPlayer has the option of playing songs using URLs, so when we feed the MediaPlayer a song URL, it fetches it from the Firebase storage and can then play the song! 
 
 
 
