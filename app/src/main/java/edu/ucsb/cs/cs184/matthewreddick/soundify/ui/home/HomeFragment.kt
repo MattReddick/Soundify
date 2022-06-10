@@ -130,7 +130,8 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    //countMatches function taken from geeks for geeks
+    //quickly grabbed this function from Google to count matches for
+    //searching songs in the Firebase
     private fun countMatches(string: String, pattern: String): Int {
         var index = 0
         var count = 0
