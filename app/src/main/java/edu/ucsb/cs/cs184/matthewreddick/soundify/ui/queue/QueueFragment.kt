@@ -89,7 +89,12 @@ class QueueFragment : Fragment() {
                 removeFromQueueBtn = myViewSpotify.findViewById(R.id.removeFromQueue)
             }
             removeFromQueueBtn.setOnClickListener {
-                if (playerObject.queue!!.size > 0) playerObject.queue!!.remove(playerObject.queue!![p0])
+                if (playerObject.queue!![p0] == playerObject.getCurrentSong()) {
+                       if (playerObject.mediaPlayer?.isPlaying == true || playerObject.getTrackWasStartedSpotify()) {
+                            Toast.makeText(curCon, "Cannot remove current song!", Toast.LENGTH_SHORT).show()
+                       }
+                }
+                else if (playerObject.queue!!.size > 0) playerObject.queue!!.remove(playerObject.queue!![p0])
                 this.notifyDataSetChanged()
             }
 

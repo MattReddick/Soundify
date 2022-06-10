@@ -170,7 +170,7 @@ class SearchFragment : Fragment(){
             titleText.text = tmpSong.getTitle()
             artistText.text = tmpSong.getArtist()
         } else {
-            Toast.makeText(context, "No songs on queue!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "No song Available!", Toast.LENGTH_SHORT).show()
         }
     }
 

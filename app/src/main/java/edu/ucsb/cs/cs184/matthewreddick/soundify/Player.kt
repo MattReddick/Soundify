@@ -38,6 +38,10 @@ class Player : Serializable {
     private val tag = "SpotifyPlayer Class"
     private var trackWasStartedSpotify = false
 
+    fun getTrackWasStartedSpotify(): Boolean {
+        return trackWasStartedSpotify
+    }
+
     fun getLoop(): Boolean {
         return loop
     }
@@ -65,12 +69,13 @@ class Player : Serializable {
     }
 
     fun shuffleQueue() {
-        if(currentSongIndex < ((queue?.size) as Int) - 1) {
-            Collections.shuffle(queue?.subList(currentSongIndex + 1, (queue?.size!!)))
+        if(currentSongIndex < ((queue?.size) as Int) || queue?.size == 0) {
+            Collections.shuffle(queue?.subList(0, (queue?.size!!)))
+            currentSongIndex = queue!!.indexOf(currentSong)
             Log.i("QUEUE", queue.toString())
         }
         else {
-            Toast.makeText(mainContext, "Add songs to queue", Toast.LENGTH_SHORT).show()
+            Toast.makeText(mainContext, "No songs on the Queue", Toast.LENGTH_SHORT).show()
         }
     }
 
